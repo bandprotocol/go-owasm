@@ -41,4 +41,5 @@ func main() {
 	fmt.Println("Hello, World!")
 	code, _ := ioutil.ReadFile("./wasm/fun3.wasm")
 	api.Prepare(code, &Env{})
+	fmt.Println("Hello, World!")
 }

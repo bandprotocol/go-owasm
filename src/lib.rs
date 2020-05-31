@@ -11,32 +11,41 @@ use wasmer_runtime::{instantiate, Ctx};
 use wasmer_runtime_core::{func, imports, wasmparser, Func};
 
 #[no_mangle]
-pub extern "C" fn do_compile(input: Span, output: &mut Span) {
-    output.write(&compile(input.read()));
+pub extern "C" fn do_compile(input: Span, output: &mut Span) -> i32 {
+    match compile(input.read()) {
+        Ok(out) => {
+            output.write(&out);
+            0
+        }
+        Err(code) => code,
+    }
 }
 
 #[no_mangle]
-pub extern "C" fn do_run(code: Span, is_prepare: bool, env: Env) {
-    run(code.read(), is_prepare, env)
+pub extern "C" fn do_run(code: Span, is_prepare: bool, env: Env) -> i32 {
+    match run(code.read(), is_prepare, env) {
+        Ok(_) => 0,
+        Err(code) => code,
+    }
 }
 
-fn compile(code: &[u8]) -> Vec<u8> {
+fn compile(code: &[u8]) -> Result<Vec<u8>, i32> {
     // Check that the given Wasm code is indeed a valid Wasm.
-    wasmparser::validate(code, None).unwrap();
+    wasmparser::validate(code, None).map_err(|_| 1)?;
     // Simple gas rule. Every opcode and memory growth costs 1 gas.
     let gas_rules = rules::Set::new(1, Default::default()).with_grow_cost(1);
     // Start the compiling chains. TODO: Add more safeguards.
-    let module = elements::deserialize_buffer(code).unwrap();
-    let module = pwasm_utils::inject_gas_counter(module, &gas_rules).unwrap();
+    let module = elements::deserialize_buffer(code).map_err(|_| 2)?;
+    let module = pwasm_utils::inject_gas_counter(module, &gas_rules).map_err(|_| 3)?;
     // Serialize the final Wasm code back to bytes.
-    elements::serialize(module).unwrap()
+    elements::serialize(module).map_err(|_| 4)
 }
 
 struct ImportReference(*mut c_void);
 unsafe impl Send for ImportReference {}
 unsafe impl Sync for ImportReference {}
 
-fn run(code: &[u8], is_prepare: bool, env: Env) {
+fn run(code: &[u8], is_prepare: bool, env: Env) -> Result<(), i32> {
     let vm = &mut vm::VMLogic::new(env);
     let raw_ptr = vm as *mut _ as *mut c_void;
     let import_reference = ImportReference(raw_ptr);
@@ -92,10 +101,8 @@ fn run(code: &[u8], is_prepare: bool, env: Env) {
             }),
         },
     };
-    let instance = instantiate(code, &import_object).unwrap();
-    let function: Func<(), ()> = instance
-        .exports
-        .get(if is_prepare { "prepare" } else { "execute" })
-        .unwrap();
-    function.call().unwrap()
+    let instance = instantiate(code, &import_object).map_err(|_| 1)?;
+    let entry = if is_prepare { "prepare" } else { "execute" };
+    let function: Func<(), ()> = instance.exports.get(entry).map_err(|_| 2)?;
+    function.call().map_err(|_| 3)
 }

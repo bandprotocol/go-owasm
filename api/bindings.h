@@ -28,6 +28,6 @@ typedef struct {
   EnvDispatcher dis;
 } Env;
 
-void do_compile(Span input, Span *output);
+int32_t do_compile(Span input, Span *output);
 
-void do_run(Span code, bool is_prepare, Env env);
+int32_t do_run(Span code, bool is_prepare, Env env);
