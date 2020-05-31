@@ -14,7 +14,13 @@ typedef struct {
 } env_t;
 
 typedef struct {
-  int64_t (*get_ask_count)(const env_t*);
+  Span (*get_calldata)(env_t*);
+  void (*set_return_data)(env_t*, Span data);
+  int64_t (*get_ask_count)(env_t*);
+  int64_t (*get_min_count)(env_t*);
+  int64_t (*get_ans_count)(env_t*);
+  void (*ask_external_data)(env_t*, int64_t eid, int64_t did, Span data);
+  Span (*get_external_data)(env_t*, int64_t eid, int64_t vid);
 } EnvDispatcher;
 
 typedef struct {
@@ -24,4 +30,4 @@ typedef struct {
 
 void do_compile(Span input, Span *output);
 
-int32_t do_run(Span code, Env env);
+void do_run(Span code, Env env);

@@ -1,5 +1,5 @@
 use crate::env::Env;
-use std::ffi::c_void;
+use crate::span::Span;
 
 pub struct VMLogic {
     env: Env,
@@ -10,17 +10,23 @@ impl VMLogic {
         VMLogic { env: env }
     }
 
-    pub fn get_ask_count(&self) -> Result<i64, ()> {
-        Ok((self.env.dis.get_ask_count)(self.env.env))
+    pub fn get_calldata(&self) -> Span {
+        (self.env.dis.get_calldata)(self.env.env)
+    }
+
+    pub fn set_return_data(&self, data: &[u8]) {
+        (self.env.dis.set_return_data)(self.env.env, Span::create(data))
+    }
+
+    pub fn get_ask_count(&self) -> i64 {
+        (self.env.dis.get_ask_count)(self.env.env)
+    }
+
+    pub fn get_min_count(&self) -> i64 {
+        (self.env.dis.get_min_count)(self.env.env)
+    }
+
+    pub fn get_ans_count(&self) -> i64 {
+        (self.env.dis.get_ans_count)(self.env.env)
     }
 }
-
-// pub fn create_vm_state(env: Env) -> *mut c_void {
-//     let state = Box::new(VMLogic::new(env));
-//     Box::into_raw(state) as *mut c_void
-// }
-
-// pub fn destroy_vm_state(ptr: *mut c_void) {
-//     let b = unsafe { Box::from_raw(ptr as *mut VMLogic) };
-//     std::mem::drop(b);
-// }

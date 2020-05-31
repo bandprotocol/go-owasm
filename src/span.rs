@@ -8,7 +8,7 @@ pub struct Span {
 
 impl Span {
     // TODO
-    pub fn create_readonly(data: &[u8]) -> Span {
+    pub fn create(data: &[u8]) -> Span {
         Span {
             ptr: data.as_ptr() as *mut u8,
             len: data.len(),

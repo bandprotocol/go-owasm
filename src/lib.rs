@@ -16,7 +16,7 @@ pub extern "C" fn do_compile(input: Span, output: &mut Span) {
 }
 
 #[no_mangle]
-pub extern "C" fn do_run(code: Span, env: Env) -> i32 {
+pub extern "C" fn do_run(code: Span, env: Env) {
     run(code.read(), env)
 }
 
@@ -36,73 +36,47 @@ struct ImportReference(*mut c_void);
 unsafe impl Send for ImportReference {}
 unsafe impl Sync for ImportReference {}
 
-fn run(code: &[u8], env: Env) -> i32 {
+fn run(code: &[u8], env: Env) {
     let vm = &mut vm::VMLogic::new(env);
     let raw_ptr = vm as *mut _ as *mut c_void;
     let import_reference = ImportReference(raw_ptr);
     let import_object = imports! {
-        move || {
-            let dtor = (|_: *mut c_void| {}) as fn(*mut c_void);
-            (import_reference.0, dtor)
-        },
+        move || (import_reference.0, (|_: *mut c_void| {}) as fn(*mut c_void)),
         "env" => {
-            "gas" => func!(|_: &mut Ctx, n: u32| {
-                println!("HEY {:?}", n)
+            "gas" => func!(|_: &mut Ctx, gas: u32| {
+                println!("HEY {:?}", gas)
+            }),
+            "get_calldata_size" => func!(|ctx: &mut Ctx| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                vm.get_calldata().len as i64
+            }),
+            "read_calldata" => func!(|ctx: &mut Ctx, ptr: i64, len: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                let calldata = vm.get_calldata();
+                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) {
+                    cell.set(*byte);
+                }
+            }),
+            "set_return_data" => func!(|ctx: &mut Ctx, ptr: i64, len: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                let data: Vec<u8> = ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter().map(|cell| cell.get()).collect();
+                vm.set_return_data(&data)
             }),
             "get_ask_count" => func!(|ctx: &mut Ctx| {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
                 vm.get_ask_count()
             }),
+            "get_min_count" => func!(|ctx: &mut Ctx| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                vm.get_min_count()
+            }),
+            "get_ans_count" => func!(|ctx: &mut Ctx| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                vm.get_ans_count()
+            }),
         },
     };
     let instance = instantiate(code, &import_object).unwrap();
-    let add_one: Func<(), i64> = instance.exports.get("prepare").unwrap();
-    add_one.call().unwrap() as i32
+    let function: Func<(), ()> = instance.exports.get("prepare").unwrap();
+    function.call().unwrap()
 }
-
-// #[no_mangle]
-// pub extern "C" fn compile(code: Buffer) -> Buffer {
-//     let compiler = Box::new(StreamingCompiler::<SinglePassMCG, _, _, _, _>::new(
-//         move || {
-//             let mut chain = MiddlewareChain::new();
-//             chain.push(metering::Metering::new(1000));
-//             chain
-//         },
-//     ));
-//     let module = compile_with(code.read(), compiler.as_ref()).unwrap();
-//     let cache = module.cache().unwrap();
-//     Buffer::from_vec(cache.serialize().unwrap())
-// }
-
-// pub fn run(code: &[u8]) -> Result<i32, wasmer_runtime_core::error::RuntimeError> {
-//     let import_object = imports! {
-//         "env" => {
-//             "gas" => func!(|_: &mut Ctx, n: u32| {
-//                 println!("HEY {:?}", n)
-//             }),
-//         },
-//     };
-
-//     let better_code = do_compile(code);
-//     let instance = instantiate(&better_code, &import_object).unwrap();
-//     let add_one: Func<(), i32> = instance.exports.get("prepare").unwrap();
-//     add_one.call()
-// }
-
-// #[cfg(test)]
-// mod test {
-//     use super::*;
-
-//     static EXAMPLE_WASM: &'static [u8] = include_bytes!("ez.wasm");
-//     static EXAMPLE_WASM2: &'static [u8] = include_bytes!("ez2.wasm");
-
-//     #[test]
-//     fn test_run_ez() {
-//         println!("{:?}", run(EXAMPLE_WASM))
-//     }
-
-//     #[test]
-//     fn test_run_ez2() {
-//         println!("{:?}", run(EXAMPLE_WASM2))
-//     }
-// }
