@@ -30,4 +30,4 @@ typedef struct {
 
 void do_compile(Span input, Span *output);
 
-void do_run(Span code, Env env);
+void do_run(Span code, bool is_prepare, Env env);

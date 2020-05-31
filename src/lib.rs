@@ -16,8 +16,8 @@ pub extern "C" fn do_compile(input: Span, output: &mut Span) {
 }
 
 #[no_mangle]
-pub extern "C" fn do_run(code: Span, env: Env) {
-    run(code.read(), env)
+pub extern "C" fn do_run(code: Span, is_prepare: bool, env: Env) {
+    run(code.read(), is_prepare, env)
 }
 
 fn compile(code: &[u8]) -> Vec<u8> {
@@ -36,7 +36,7 @@ struct ImportReference(*mut c_void);
 unsafe impl Send for ImportReference {}
 unsafe impl Sync for ImportReference {}
 
-fn run(code: &[u8], env: Env) {
+fn run(code: &[u8], is_prepare: bool, env: Env) {
     let vm = &mut vm::VMLogic::new(env);
     let raw_ptr = vm as *mut _ as *mut c_void;
     let import_reference = ImportReference(raw_ptr);
@@ -74,9 +74,28 @@ fn run(code: &[u8], env: Env) {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
                 vm.get_ans_count()
             }),
+            "ask_external_data" => func!(|ctx: &mut Ctx, eid: i64, did: i64, ptr: i64, len: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                let data: Vec<u8> = ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter().map(|cell| cell.get()).collect();
+                vm.ask_external_data(eid, did, &data)
+            }),
+            "get_external_data_size" => func!(|ctx: &mut Ctx, eid: i64, vid: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                vm.get_external_data(eid, vid).len as i64
+            }),
+            "read_external_data" => func!(|ctx: &mut Ctx, eid: i64, vid: i64, ptr: i64, len: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                let calldata = vm.get_external_data(eid, vid);
+                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) {
+                    cell.set(*byte);
+                }
+            }),
         },
     };
     let instance = instantiate(code, &import_object).unwrap();
-    let function: Func<(), ()> = instance.exports.get("prepare").unwrap();
+    let function: Func<(), ()> = instance
+        .exports
+        .get(if is_prepare { "prepare" } else { "execute" })
+        .unwrap();
     function.call().unwrap()
 }
