@@ -34,6 +34,10 @@ impl VMLogic {
         (self.env.dis.ask_external_data)(self.env.env, eid, did, Span::create(data))
     }
 
+    pub fn get_external_data_status(&self, eid: i64, vid: i64) -> i64 {
+        (self.env.dis.get_external_data_status)(self.env.env, eid, vid)
+    }
+
     pub fn get_external_data(&self, eid: i64, vid: i64) -> Span {
         (self.env.dis.get_external_data)(self.env.env, eid, vid)
     }

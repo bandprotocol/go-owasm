@@ -33,6 +33,10 @@ func (e *Env) AskExternalData(eid int64, did int64, data []byte) {
 	fmt.Println("asked", eid, did, string(data))
 }
 
+func (e *Env) GetExternalDataStatus(eid int64, vid int64) int64 {
+	return 42
+}
+
 func (e *Env) GetExternalData(eid int64, vid int64) []byte {
 	return []byte("switez")
 }

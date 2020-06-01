@@ -14,6 +14,8 @@ package api
 // int64_t cGetAnsCount_cgo(env_t *e) { return cGetAnsCount(e); }
 // void cAskExternalData(env_t *e, int64_t eid, int64_t did);
 // void cAskExternalData_cgo(env_t *e, int64_t eid, int64_t did) { return cAskExternalData(e, eid, did); }
+// int64_t cGetExternalDataStatus(env_t *e, int64_t eid, int64_t vid);
+// int64_t cGetExternalDataStatus_cgo(env_t *e, int64_t eid, int64_t vid) { return cGetExternalDataStatus(e, eid, vid); }
 // Span cGetExternalData(env_t *e, int64_t eid, int64_t vid);
 // Span cGetExternalData_cgo(env_t *e, int64_t eid, int64_t vid) { return cGetExternalData(e, eid, vid); }
 import "C"

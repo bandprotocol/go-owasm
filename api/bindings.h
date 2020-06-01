@@ -20,6 +20,7 @@ typedef struct {
   int64_t (*get_min_count)(env_t*);
   int64_t (*get_ans_count)(env_t*);
   void (*ask_external_data)(env_t*, int64_t eid, int64_t did, Span data);
+  int64_t (*get_external_data_status)(env_t*, int64_t eid, int64_t vid);
   Span (*get_external_data)(env_t*, int64_t eid, int64_t vid);
 } EnvDispatcher;
 

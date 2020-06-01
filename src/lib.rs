@@ -62,9 +62,7 @@ fn run(code: &[u8], is_prepare: bool, env: Env) -> Result<(), i32> {
             "read_calldata" => func!(|ctx: &mut Ctx, ptr: i64, len: i64| {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
                 let calldata = vm.get_calldata();
-                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) {
-                    cell.set(*byte);
-                }
+                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) { cell.set(*byte); }
             }),
             "set_return_data" => func!(|ctx: &mut Ctx, ptr: i64, len: i64| {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
@@ -88,6 +86,10 @@ fn run(code: &[u8], is_prepare: bool, env: Env) -> Result<(), i32> {
                 let data: Vec<u8> = ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter().map(|cell| cell.get()).collect();
                 vm.ask_external_data(eid, did, &data)
             }),
+            "get_external_data_status" => func!(|ctx: &mut Ctx, eid: i64, vid: i64| {
+                let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
+                vm.get_external_data_status(eid, vid)
+            }),
             "get_external_data_size" => func!(|ctx: &mut Ctx, eid: i64, vid: i64| {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
                 vm.get_external_data(eid, vid).len as i64
@@ -95,9 +97,7 @@ fn run(code: &[u8], is_prepare: bool, env: Env) -> Result<(), i32> {
             "read_external_data" => func!(|ctx: &mut Ctx, eid: i64, vid: i64, ptr: i64, len: i64| {
                 let vm: &mut vm::VMLogic = unsafe { &mut *(ctx.data as *mut vm::VMLogic) };
                 let calldata = vm.get_external_data(eid, vid);
-                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) {
-                    cell.set(*byte);
-                }
+                for (byte, cell) in calldata.read().iter().zip(ctx.memory(0).view()[ptr as usize..(ptr + len) as usize].iter()) { cell.set(*byte); }
             }),
         },
     };
