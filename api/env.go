@@ -82,6 +82,10 @@ func cGetExternalData(e *C.env_t, eid C.int64_t, vid C.int64_t) C.Span {
 	key := [2]int64{int64(eid), int64(vid)}
 	env := (*(*envIntl)(unsafe.Pointer(e)))
 	if _, ok := env.extData[key]; !ok {
+		data := env.ext.GetExternalData(int64(eid), int64(vid))
+		if data == nil {
+			return env.null
+		}
 		env.extData[key] = copySpan(env.ext.GetExternalData(int64(eid), int64(vid)))
 	}
 	return env.extData[key]

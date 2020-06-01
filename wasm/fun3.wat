@@ -9,7 +9,7 @@
     i32.const 1024
     i64.extend_u/i32
     tee_local $l0
-    i64.const 1000000000
+    i64.const 10
     call $ask_external_data
     i64.const 2
     i64.const 3
