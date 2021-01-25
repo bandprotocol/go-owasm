@@ -27,7 +27,7 @@ pub extern "C" fn do_run(
     output: &mut RunOutput,
 ) -> owasm::core::error::Error {
     let vm_env = vm::VMEnv::new(env, span_size);
-    match core::run(code.read(), gas_limit, is_prepare, &vm_env) {
+    match core::run(code.read(), gas_limit, is_prepare, vm_env) {
         Ok(gas_used) => {
             output.gas_used = gas_used;
             owasm::core::error::Error::NoError
