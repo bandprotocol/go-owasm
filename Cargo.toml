@@ -8,7 +8,8 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm = { git = "https://github.com/bandprotocol/owasm", rev = "be50d1805fd7fb8502a1524c54215104a8c602b5" }
+# owasm = { git = "https://github.com/bandprotocol/owasm", rev = "be50d1805fd7fb8502a1524c54215104a8c602b5" }
+owasm = { path = "../owasm" }
 
 [profile.release]
 opt-level = 3
