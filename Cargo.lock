@@ -182,7 +182,7 @@ dependencies = [
  "clru",
  "cosmwasm-std",
  "hex",
- "parity-wasm",
+ "parity-wasm 0.42.1",
  "schemars",
  "serde",
  "serde_json",
@@ -435,6 +435,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "failure"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d32e9bd16cc02eae7db7ef620b392808b89f6a5e16bb3497d159c6b92a0f4f86"
+dependencies = [
+ "backtrace",
+ "failure_derive",
+]
+
+[[package]]
+name = "failure_derive"
+version = "0.1.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aa4da3c766cd7a0db8242e326e9e4e081edd567072893ed320008189715366a4"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+ "synstructure",
+]
+
+[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -503,6 +525,8 @@ checksum = "f6503fe142514ca4799d4c26297c4248239fe8838d827db6bd6065c6ed29a6ce"
 name = "go-owasm"
 version = "0.1.0"
 dependencies = [
+ "cosmwasm-vm",
+ "failure",
  "owasm",
 ]
 
@@ -770,15 +794,16 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 [[package]]
 name = "owasm"
 version = "0.1.9"
-source = "git+https://github.com/bandprotocol/owasm?rev=be50d1805fd7fb8502a1524c54215104a8c602b5#be50d1805fd7fb8502a1524c54215104a8c602b5"
+source = "git+https://github.com/bandprotocol/owasm?rev=5499341b8e9ca5454c881c45785a000dcbfc3316#5499341b8e9ca5454c881c45785a000dcbfc3316"
 dependencies = [
  "assert_matches",
  "clru",
  "cosmwasm-vm",
  "hex",
  "json",
+ "lazy_static",
  "num",
- "parity-wasm",
+ "parity-wasm 0.41.0",
  "pwasm-utils",
  "tempfile",
  "wasmer",
@@ -796,6 +821,12 @@ dependencies = [
  "libc",
  "winapi",
 ]
+
+[[package]]
+name = "parity-wasm"
+version = "0.41.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ddfc878dac00da22f8f61e7af3157988424567ab01d9920b962ef7dcbd7cd865"
 
 [[package]]
 name = "parity-wasm"
@@ -874,13 +905,13 @@ dependencies = [
 
 [[package]]
 name = "pwasm-utils"
-version = "0.17.0"
+version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "51992bc74c0f34f759ff97fb303602e60343afc83693769c91aa17724442809e"
+checksum = "4f7a12f176deee919f4ba55326ee17491c8b707d0987aed822682c821b660192"
 dependencies = [
  "byteorder",
  "log",
- "parity-wasm",
+ "parity-wasm 0.41.0",
 ]
 
 [[package]]
@@ -1201,6 +1232,18 @@ checksum = "c700597eca8a5a762beb35753ef6b94df201c81cca676604f547495a0d7f0081"
 dependencies = [
  "proc-macro2",
  "quote",
+ "unicode-xid",
+]
+
+[[package]]
+name = "synstructure"
+version = "0.12.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b834f2d66f734cb897113e34aaff2f1ab4719ca946f9a7358dba8f8064148701"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
  "unicode-xid",
 ]
 
