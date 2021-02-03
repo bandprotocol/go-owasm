@@ -794,7 +794,7 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 [[package]]
 name = "owasm"
 version = "0.1.9"
-source = "git+https://github.com/bandprotocol/owasm?rev=5499341b8e9ca5454c881c45785a000dcbfc3316#5499341b8e9ca5454c881c45785a000dcbfc3316"
+source = "git+https://github.com/bandprotocol/owasm?rev=2c06d1d7b26fe763e939f9866a6316846b932e6d#2c06d1d7b26fe763e939f9866a6316846b932e6d"
 dependencies = [
  "assert_matches",
  "clru",
