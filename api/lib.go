@@ -24,7 +24,27 @@ import (
 	"unsafe"
 )
 
-func Compile(code []byte, spanSize int) ([]byte, error) {
+type RunOutput struct {
+	GasUsed uint32
+}
+
+type Vm struct {
+	cache Cache
+}
+
+func NewVm(size uint64) (*Vm, error) {
+	cache, err := InitCache(size)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &Vm{
+		cache: cache,
+	}, nil
+}
+
+func (vm Vm) Compile(code []byte, spanSize int) ([]byte, error) {
 	inputSpan := copySpan(code)
 	defer freeSpan(inputSpan)
 	outputSpan := newSpan(spanSize)
@@ -33,24 +53,20 @@ func Compile(code []byte, spanSize int) ([]byte, error) {
 	return readSpan(outputSpan), err
 }
 
-type RunOutput struct {
-	GasUsed uint32
+func (vm Vm) Prepare(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
+	return vm.run(code, gasLimit, spanSize, true, env)
 }
 
-func Prepare(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
-	return run(code, gasLimit, spanSize, true, env)
+func (vm Vm) Execute(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
+	return vm.run(code, gasLimit, spanSize, false, env)
 }
 
-func Execute(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
-	return run(code, gasLimit, spanSize, false, env)
-}
-
-func run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, env EnvInterface) (RunOutput, error) {
+func (vm Vm) run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, env EnvInterface) (RunOutput, error) {
 	codeSpan := copySpan(code)
 	defer freeSpan(codeSpan)
 	envIntl := createEnvIntl(env)
 	output := C.RunOutput{}
-	err := toGoError(C.do_run(codeSpan, C.uint32_t(gasLimit), C.int64_t(spanSize), C.bool(isPrepare), C.Env{
+	err := toGoError(C.do_run(vm.cache.ptr, codeSpan, C.uint32_t(gasLimit), C.int64_t(spanSize), C.bool(isPrepare), C.Env{
 		env: (*C.env_t)(unsafe.Pointer(envIntl)),
 		dis: C.EnvDispatcher{
 			get_calldata:             C.get_calldata_fn(C.cGetCalldata_cgo),
@@ -68,4 +84,20 @@ func run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, env EnvIn
 	} else {
 		return RunOutput{GasUsed: uint32(output.gas_used)}, nil
 	}
+}
+
+type Cache struct {
+	ptr *C.cache_t
+}
+
+func InitCache(cacheSize uint64) (Cache, error) {
+	ptr, err := C.init_cache(C.uint64_t(cacheSize))
+	if err != nil {
+		return Cache{}, err
+	}
+	return Cache{ptr: ptr}, nil
+}
+
+func ReleaseCache(cache Cache) {
+	C.release_cache(cache.ptr)
 }

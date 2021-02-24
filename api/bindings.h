@@ -75,9 +75,18 @@ typedef struct RunOutput {
   uint32_t gas_used;
 } RunOutput;
 
+// cache
+typedef struct cache_t {
+} cache_t;
+
+cache_t *init_cache(uint64_t cache_size);
+
+void release_cache(cache_t *cache);
+
 Error do_compile(Span input, Span *output);
 
-Error do_run(Span code,
+Error do_run(cache_t *cache,
+             Span code,
              uint32_t gas_limit,
              int64_t span_size,
              bool is_prepare,
