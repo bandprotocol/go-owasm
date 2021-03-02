@@ -587,7 +587,6 @@ checksum = "f6503fe142514ca4799d4c26297c4248239fe8838d827db6bd6065c6ed29a6ce"
 name = "go-owasm"
 version = "0.2.0"
 dependencies = [
- "cosmwasm-vm",
  "failure",
  "owasm",
 ]
@@ -866,7 +865,7 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 [[package]]
 name = "owasm"
 version = "0.1.9"
-source = "git+https://github.com/bandprotocol/owasm?rev=8dc6cb7fd7f3a601d43df6934f2ce1a8d3ba062e#8dc6cb7fd7f3a601d43df6934f2ce1a8d3ba062e"
+source = "git+https://github.com/bandprotocol/owasm?rev=196c5a1cbac50e819ee0b2ecae4ba7294d439318#196c5a1cbac50e819ee0b2ecae4ba7294d439318"
 dependencies = [
  "assert_matches",
  "clru 0.2.1",
