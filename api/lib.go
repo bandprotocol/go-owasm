@@ -32,7 +32,7 @@ type Vm struct {
 	cache Cache
 }
 
-func NewVm(size uint64) (*Vm, error) {
+func NewVm(size uint32) (*Vm, error) {
 	cache, err := InitCache(size)
 
 	if err != nil {
@@ -90,8 +90,8 @@ type Cache struct {
 	ptr *C.cache_t
 }
 
-func InitCache(cacheSize uint64) (Cache, error) {
-	ptr, err := C.init_cache(C.uint64_t(cacheSize))
+func InitCache(cacheSize uint32) (Cache, error) {
+	ptr, err := C.init_cache(C.uint32_t(cacheSize))
 	if err != nil {
 		return Cache{}, err
 	}

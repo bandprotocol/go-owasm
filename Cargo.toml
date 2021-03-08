@@ -8,8 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm = { git = "https://github.com/bandprotocol/owasm", rev = "8dc6cb7fd7f3a601d43df6934f2ce1a8d3ba062e" }
-cosmwasm-vm = { git = "https://github.com/CosmWasm/cosmwasm", rev = "263202f13fef3bfabc2e1036514667812f0e7e62" }
+owasm = { git = "https://github.com/bandprotocol/owasm", rev = "9aa4433af6fadc197bc58970b9dfa2b037e9ad33" }
 failure = "0.1.6"
 
 [profile.release]

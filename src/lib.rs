@@ -10,14 +10,13 @@ use failure::{bail, Error};
 use std::panic::{catch_unwind};
 
 use owasm::core::cache::{Cache, CacheOptions};
-use cosmwasm_vm::Size;
 
 // Cache initializing section
 #[repr(C)]
 pub struct cache_t {}
 
 #[no_mangle]
-pub extern "C" fn init_cache(size: usize) -> *mut cache_t {
+pub extern "C" fn init_cache(size: u32) -> *mut cache_t {
     let r = catch_unwind(|| do_init_cache(size)).unwrap_or_else(|_| bail!("Caught panic"));
     match r {
         Ok(t) => t as *mut cache_t,
@@ -25,8 +24,8 @@ pub extern "C" fn init_cache(size: usize) -> *mut cache_t {
     }
 }
 
-fn do_init_cache(size: usize) -> Result<*mut Cache, Error> {
-    let cache = Cache::new( CacheOptions { memory_cache_size: Size::kibi(size) });
+fn do_init_cache(size: u32) -> Result<*mut Cache, Error> {
+    let cache = Cache::new( CacheOptions { cache_size: size });
     let out = Box::new(cache);
     let res = Ok(Box::into_raw(out));
     res
