@@ -8,7 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm = { git = "https://github.com/bandprotocol/owasm", rev = "9aa4433af6fadc197bc58970b9dfa2b037e9ad33" }
+owasm = { git = "https://github.com/bandprotocol/owasm", rev = "1893224c9fab600bd748a23ccade7b1837ce7069" }
 failure = "0.1.6"
 
 [profile.release]
