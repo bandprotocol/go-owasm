@@ -46,6 +46,17 @@ impl vm::Env for VMEnv {
 
     fn get_min_count(&self) -> i64 { (self.env.dis.get_min_count)(self.env.env) }
 
+    fn get_prepare_time(&self) -> i64 { (self.env.dis.get_min_count)(self.env.env) }
+
+    fn get_execute_time(&self) -> Result<i64, Error> {
+        let mut execute_time = 0;
+        match (self.env.dis.get_execute_time)(self.env.env, &mut execute_time) {
+            Error::NoError => Ok(execute_time),
+            err => Err(err),
+        }
+    }
+
+
     fn get_ans_count(&self) -> Result<i64, Error> {
         let mut ans_count = 0;
         match (self.env.dis.get_ans_count)(self.env.env, &mut ans_count) {

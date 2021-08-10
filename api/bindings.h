@@ -9,8 +9,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-enum Error
-{
+enum Error {
   Error_NoError = 0,
   Error_SpanTooSmallError = 1,
   Error_ValidationError = 2,
@@ -37,6 +36,8 @@ enum Error
 };
 typedef int32_t Error;
 
+typedef struct Cache Cache;
+
 /**
  * A `span` is a lightweight struct used to refer to a section of memory. The memory
  * section is not owned by the span, similar to C++'s std::span. The `span`'s creator is
@@ -46,56 +47,52 @@ typedef int32_t Error;
  * One side allocates space and creates a `span` for the counterpart to read or write
  * without needing to worry about memory management.
  */
-typedef struct Span
-{
+typedef struct Span {
   uint8_t *ptr;
   uintptr_t len;
   uintptr_t cap;
 } Span;
 
-typedef struct env_t
-{
+typedef struct env_t {
   uint8_t _private[0];
 } env_t;
 
-typedef struct EnvDispatcher
-{
-  Error (*get_calldata)(env_t *, Span *calldata);
-  Error (*set_return_data)(env_t *, Span data);
-  int64_t (*get_ask_count)(env_t *);
-  int64_t (*get_min_count)(env_t *);
-  Error (*get_ans_count)(env_t *, int64_t *);
-  Error (*ask_external_data)(env_t *, int64_t eid, int64_t did, Span data);
-  Error (*get_external_data_status)(env_t *, int64_t eid, int64_t vid, int64_t *status);
-  Error (*get_external_data)(env_t *, int64_t eid, int64_t vid, Span *data);
+typedef struct EnvDispatcher {
+  Error (*get_calldata)(env_t*, Span *calldata);
+  Error (*set_return_data)(env_t*, Span data);
+  int64_t (*get_ask_count)(env_t*);
+  int64_t (*get_min_count)(env_t*);
+  int64_t (*get_prepare_time)(env_t*);
+  Error (*get_execute_time)(env_t*, int64_t*);
+  Error (*get_ans_count)(env_t*, int64_t*);
+  Error (*ask_external_data)(env_t*, int64_t eid, int64_t did, Span data);
+  Error (*get_external_data_status)(env_t*, int64_t eid, int64_t vid, int64_t *status);
+  Error (*get_external_data)(env_t*, int64_t eid, int64_t vid, Span *data);
 } EnvDispatcher;
 
-typedef struct Env
-{
+typedef struct Env {
   env_t *env;
   EnvDispatcher dis;
 } Env;
 
-typedef struct RunOutput
-{
+typedef struct RunOutput {
   uint32_t gas_used;
 } RunOutput;
 
-// cache
-typedef struct cache_t
-{
+typedef struct cache_t {
+
 } cache_t;
-
-cache_t *init_cache(uint32_t cache_size);
-
-void release_cache(cache_t *cache);
 
 Error do_compile(Span input, Span *output);
 
-Error do_run(cache_t *cache,
+Error do_run(Cache *cache,
              Span code,
              uint32_t gas_limit,
              int64_t span_size,
              bool is_prepare,
              Env env,
              RunOutput *output);
+
+cache_t *init_cache(uint32_t size);
+
+void release_cache(cache_t *cache);
