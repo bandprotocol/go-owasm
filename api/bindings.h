@@ -36,8 +36,6 @@ enum Error {
 };
 typedef int32_t Error;
 
-typedef struct Cache Cache;
-
 /**
  * A `span` is a lightweight struct used to refer to a section of memory. The memory
  * section is not owned by the span, similar to C++'s std::span. The `span`'s creator is
@@ -79,13 +77,14 @@ typedef struct RunOutput {
   uint32_t gas_used;
 } RunOutput;
 
+// cache
 typedef struct cache_t {
 
 } cache_t;
 
 Error do_compile(Span input, Span *output);
 
-Error do_run(Cache *cache,
+Error do_run(cache_t *cache,
              Span code,
              uint32_t gas_limit,
              int64_t span_size,

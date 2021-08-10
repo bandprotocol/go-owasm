@@ -11,6 +11,10 @@ package api
 // int64_t cGetAskCount_cgo(env_t *e);
 // typedef int64_t (*get_min_count_fn)(env_t*);
 // int64_t cGetMinCount_cgo(env_t *e);
+// typedef int64_t (*get_prepare_time_fn)(env_t*);
+// int64_t cGetPrepareTime_cgo(env_t *e);
+// typedef int64_t (*get_execute_time_fn)(env_t*);
+// int64_t cGetExecuteTime_cgo(env_t *e);
 // typedef int64_t (*get_ans_count_fn)(env_t*);
 // int64_t cGetAnsCount_cgo(env_t *e);
 // typedef void (*ask_external_data_fn)(env_t*, int64_t eid, int64_t did);
@@ -73,6 +77,8 @@ func (vm Vm) run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, e
 			set_return_data:          C.set_return_data_fn(C.cSetReturnData_cgo),
 			get_ask_count:            C.get_ask_count_fn(C.cGetAskCount_cgo),
 			get_min_count:            C.get_min_count_fn(C.cGetMinCount_cgo),
+			get_prepare_time:         C.get_prepare_time_fn(C.cGetPrepareTime_cgo),
+			get_execute_time:         C.get_execute_time_fn(C.cGetExecuteTime_cgo),
 			get_ans_count:            C.get_ans_count_fn(C.cGetAnsCount_cgo),
 			ask_external_data:        C.ask_external_data_fn(C.cAskExternalData_cgo),
 			get_external_data_status: C.get_external_data_status_fn(C.cGetExternalDataStatus_cgo),
