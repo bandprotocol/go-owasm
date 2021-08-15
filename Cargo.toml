@@ -8,7 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm = { path = "../owasm"}
+owasm-vm = "0.1.12"
 failure = "0.1.6"
 
 [profile.release]
