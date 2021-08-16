@@ -10,6 +10,10 @@ package api
 // int64_t cGetAskCount_cgo(env_t *e) { return cGetAskCount(e); }
 // int64_t cGetMinCount(env_t *e);
 // int64_t cGetMinCount_cgo(env_t *e) { return cGetMinCount(e); }
+// int64_t cGetPrepareTime(env_t *e);
+// int64_t cGetPrepareTime_cgo(env_t *e) { return cGetPrepareTime(e); }
+// Error cGetExecuteTime(env_t *e, int64_t *val);
+// Error cGetExecuteTime_cgo(env_t *e, int64_t *val) { return cGetExecuteTime(e, val); }
 // Error cGetAnsCount(env_t *e, int64_t *val);
 // Error cGetAnsCount_cgo(env_t *e, int64_t *val) { return cGetAnsCount(e, val); }
 // Error cAskExternalData(env_t *e, int64_t eid, int64_t did, Span data);

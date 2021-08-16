@@ -11,6 +11,8 @@ type EnvInterface interface {
 	SetReturnData([]byte) error
 	GetAskCount() int64
 	GetMinCount() int64
+	GetPrepareTime() int64
+	GetExecuteTime() (int64, error)
 	GetAnsCount() (int64, error)
 	AskExternalData(eid int64, did int64, data []byte) error
 	GetExternalDataStatus(eid int64, vid int64) (int64, error)
@@ -48,6 +50,21 @@ func cGetAskCount(e *C.env_t) C.int64_t {
 //export cGetMinCount
 func cGetMinCount(e *C.env_t) C.int64_t {
 	return C.int64_t((*(*envIntl)(unsafe.Pointer(e))).ext.GetMinCount())
+}
+
+//export cGetPrepareTime
+func cGetPrepareTime(e *C.env_t) C.int64_t {
+	return C.int64_t((*(*envIntl)(unsafe.Pointer(e))).ext.GetPrepareTime())
+}
+
+//export cGetExecuteTime
+func cGetExecuteTime(e *C.env_t, val *C.int64_t) C.Error {
+	v, err := (*(*envIntl)(unsafe.Pointer(e))).ext.GetExecuteTime()
+	if err != nil {
+		return toCError(err)
+	}
+	*val = C.int64_t(v)
+	return C.Error_NoError
 }
 
 //export cGetAnsCount

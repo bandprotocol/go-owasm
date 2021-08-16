@@ -22,6 +22,14 @@ func (e *Env) GetMinCount() int64 {
 	return 20000
 }
 
+func (e *Env) GetPrepareTime() int64 {
+	return 1623403856
+}
+
+func (e *Env) GetExecuteTime() int64 {
+	return 1623403868
+}
+
 func (e *Env) GetAnsCount() int64 {
 	return 30000
 }

@@ -1,8 +1,8 @@
 use crate::env::Env;
 use crate::span::Span;
 
-use owasm::core::error::Error;
-use owasm::core::vm;
+use owasm_vm::error::Error;
+use owasm_vm::vm;
 
 pub struct VMEnv {
     env: Env,       // The execution environment for callbacks to Golang.
@@ -19,7 +19,9 @@ impl VMEnv {
 }
 
 impl vm::Env for VMEnv {
-    fn get_span_size(&self) -> i64 { self.span_size }
+    fn get_span_size(&self) -> i64 {
+        self.span_size
+    }
 
     fn get_calldata(&self) -> Result<Vec<u8>, Error> {
         let mut mem: Vec<u8> = Vec::with_capacity(self.span_size as usize);
@@ -42,9 +44,25 @@ impl vm::Env for VMEnv {
         }
     }
 
-    fn get_ask_count(&self) -> i64 { (self.env.dis.get_ask_count)(self.env.env) }
+    fn get_ask_count(&self) -> i64 {
+        (self.env.dis.get_ask_count)(self.env.env)
+    }
 
-    fn get_min_count(&self) -> i64 { (self.env.dis.get_min_count)(self.env.env) }
+    fn get_min_count(&self) -> i64 {
+        (self.env.dis.get_min_count)(self.env.env)
+    }
+
+    fn get_prepare_time(&self) -> i64 {
+        (self.env.dis.get_prepare_time)(self.env.env)
+    }
+
+    fn get_execute_time(&self) -> Result<i64, Error> {
+        let mut execute_time = 0;
+        match (self.env.dis.get_execute_time)(self.env.env, &mut execute_time) {
+            Error::NoError => Ok(execute_time),
+            err => Err(err),
+        }
+    }
 
     fn get_ans_count(&self) -> Result<i64, Error> {
         let mut ans_count = 0;

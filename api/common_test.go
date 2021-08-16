@@ -103,6 +103,14 @@ func (env *MockEnv) GetMinCount() int64 {
 	return 0
 }
 
+func (env *MockEnv) GetPrepareTime() int64 {
+	return 0
+}
+
+func (env *MockEnv) GetExecuteTime() (int64, error) {
+	return 0, nil
+}
+
 func (env *MockEnv) GetAnsCount() (int64, error) {
 	return 0, nil
 }

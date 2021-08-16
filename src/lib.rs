@@ -3,13 +3,15 @@ mod span;
 mod vm;
 
 use env::{Env, RunOutput};
-use owasm::core;
+
 use span::Span;
 
 use failure::{bail, Error};
-use std::panic::{catch_unwind};
+use std::panic::catch_unwind;
 
-use owasm::core::cache::{Cache, CacheOptions};
+use owasm_vm;
+use owasm_vm::cache::{Cache, CacheOptions};
+use owasm_vm::error::Error as OwasmError;
 
 // Cache initializing section
 #[repr(C)]
@@ -20,12 +22,12 @@ pub extern "C" fn init_cache(size: u32) -> *mut cache_t {
     let r = catch_unwind(|| do_init_cache(size)).unwrap_or_else(|_| bail!("Caught panic"));
     match r {
         Ok(t) => t as *mut cache_t,
-        Err(_) => std::ptr::null_mut()
+        Err(_) => std::ptr::null_mut(),
     }
 }
 
 fn do_init_cache(size: u32) -> Result<*mut Cache, Error> {
-    let cache = Cache::new( CacheOptions { cache_size: size });
+    let cache = Cache::new(CacheOptions { cache_size: size });
     let out = Box::new(cache);
     let res = Ok(Box::into_raw(out));
     res
@@ -41,11 +43,11 @@ pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
 
 // Compile and execute section
 #[no_mangle]
-pub extern "C" fn do_compile(input: Span, output: &mut Span) -> owasm::core::error::Error {
-    match core::compile(input.read()) {
+pub extern "C" fn do_compile(input: Span, output: &mut Span) -> OwasmError {
+    match owasm_vm::compile(input.read()) {
         Ok(out) => {
             output.write(&out);
-            owasm::core::error::Error::NoError
+            OwasmError::NoError
         }
         Err(e) => e,
     }
@@ -60,12 +62,12 @@ pub extern "C" fn do_run(
     is_prepare: bool,
     env: Env,
     output: &mut RunOutput,
-) -> owasm::core::error::Error {
+) -> OwasmError {
     let vm_env = vm::VMEnv::new(env, span_size);
-    match core::run(cache, code.read(), gas_limit, is_prepare, vm_env) {
+    match owasm_vm::run(cache, code.read(), gas_limit, is_prepare, vm_env) {
         Ok(gas_used) => {
             output.gas_used = gas_used;
-            owasm::core::error::Error::NoError
+            OwasmError::NoError
         }
         Err(e) => e,
     }
