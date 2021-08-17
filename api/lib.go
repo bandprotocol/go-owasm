@@ -7,22 +7,22 @@ package api
 // Span cGetCalldata_cgo(env_t *e);
 // typedef void (*set_return_data_fn)(env_t*, Span);
 // void cSetReturnData_cgo(env_t *e, Span data);
-// typedef int64_t (*get_ask_count_fn)(env_t*);
-// int64_t cGetAskCount_cgo(env_t *e);
-// typedef int64_t (*get_min_count_fn)(env_t*);
-// int64_t cGetMinCount_cgo(env_t *e);
+// typedef uint64_t (*get_ask_count_fn)(env_t*);
+// uint64_t cGetAskCount_cgo(env_t *e);
+// typedef uint64_t (*get_min_count_fn)(env_t*);
+// uint64_t cGetMinCount_cgo(env_t *e);
 // typedef int64_t (*get_prepare_time_fn)(env_t*);
 // int64_t cGetPrepareTime_cgo(env_t *e);
 // typedef int64_t (*get_execute_time_fn)(env_t*);
 // int64_t cGetExecuteTime_cgo(env_t *e);
-// typedef int64_t (*get_ans_count_fn)(env_t*);
-// int64_t cGetAnsCount_cgo(env_t *e);
-// typedef void (*ask_external_data_fn)(env_t*, int64_t eid, int64_t did);
-// void cAskExternalData_cgo(env_t *e, int64_t eid, int64_t did);
-// typedef int64_t (*get_external_data_status_fn)(env_t*, int64_t eid, int64_t vid);
-// int64_t cGetExternalDataStatus_cgo(env_t *e, int64_t eid, int64_t vid);
-// typedef Span (*get_external_data_fn)(env_t*, int64_t eid, int64_t vid);
-// Span cGetExternalData_cgo(env_t *e, int64_t eid, int64_t vid);
+// typedef uint64_t (*get_ans_count_fn)(env_t*);
+// uint64_t cGetAnsCount_cgo(env_t *e);
+// typedef void (*ask_external_data_fn)(env_t*, uint64_t eid, uint64_t did);
+// void cAskExternalData_cgo(env_t *e, uint64_t eid, uint64_t did);
+// typedef int64_t (*get_external_data_status_fn)(env_t*, uint64_t eid, uint64_t vid);
+// int64_t cGetExternalDataStatus_cgo(env_t *e, uint64_t eid, uint64_t vid);
+// typedef Span (*get_external_data_fn)(env_t*, uint64_t eid, uint64_t vid);
+// Span cGetExternalData_cgo(env_t *e, uint64_t eid, uint64_t vid);
 import "C"
 import (
 	"unsafe"

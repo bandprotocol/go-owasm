@@ -11,7 +11,6 @@ use std::panic::catch_unwind;
 
 use owasm_vm;
 use owasm_vm::cache::{Cache, CacheOptions};
-use owasm_vm::error::Error as OwasmError;
 
 // Cache initializing section
 #[repr(C)]
@@ -43,11 +42,11 @@ pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
 
 // Compile and execute section
 #[no_mangle]
-pub extern "C" fn do_compile(input: Span, output: &mut Span) -> OwasmError {
+pub extern "C" fn do_compile(input: Span, output: &mut Span) -> owasm_vm::error::Error {
     match owasm_vm::compile(input.read()) {
         Ok(out) => {
             output.write(&out);
-            OwasmError::NoError
+            owasm_vm::error::Error::NoError
         }
         Err(e) => e,
     }
@@ -62,12 +61,12 @@ pub extern "C" fn do_run(
     is_prepare: bool,
     env: Env,
     output: &mut RunOutput,
-) -> OwasmError {
+) -> owasm_vm::error::Error {
     let vm_env = vm::VMEnv::new(env, span_size);
     match owasm_vm::run(cache, code.read(), gas_limit, is_prepare, vm_env) {
         Ok(gas_used) => {
             output.gas_used = gas_used;
-            OwasmError::NoError
+            owasm_vm::error::Error::NoError
         }
         Err(e) => e,
     }

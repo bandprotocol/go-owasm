@@ -126,7 +126,7 @@ bitflags = false
 
 [parse]
 parse_deps = true
-include = ["owasm"]
+include = ["owasm-vm"]
 exclude = []
 clean = false
 extra_bindings = []
