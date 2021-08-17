@@ -44,11 +44,11 @@ impl vm::Env for VMEnv {
         }
     }
 
-    fn get_ask_count(&self) -> i64 {
+    fn get_ask_count(&self) -> u64 {
         (self.env.dis.get_ask_count)(self.env.env)
     }
 
-    fn get_min_count(&self) -> i64 {
+    fn get_min_count(&self) -> u64 {
         (self.env.dis.get_min_count)(self.env.env)
     }
 
@@ -64,7 +64,7 @@ impl vm::Env for VMEnv {
         }
     }
 
-    fn get_ans_count(&self) -> Result<i64, Error> {
+    fn get_ans_count(&self) -> Result<u64, Error> {
         let mut ans_count = 0;
         match (self.env.dis.get_ans_count)(self.env.env, &mut ans_count) {
             Error::NoError => Ok(ans_count),
@@ -72,14 +72,14 @@ impl vm::Env for VMEnv {
         }
     }
 
-    fn ask_external_data(&self, eid: i64, did: i64, data: &[u8]) -> Result<(), Error> {
+    fn ask_external_data(&self, eid: u64, did: u64, data: &[u8]) -> Result<(), Error> {
         match (self.env.dis.ask_external_data)(self.env.env, eid, did, Span::create(data)) {
             Error::NoError => Ok(()),
             err => Err(err),
         }
     }
 
-    fn get_external_data_status(&self, eid: i64, vid: i64) -> Result<i64, Error> {
+    fn get_external_data_status(&self, eid: u64, vid: u64) -> Result<i64, Error> {
         let mut status = 0;
         match (self.env.dis.get_external_data_status)(self.env.env, eid, vid, &mut status) {
             Error::NoError => Ok(status),
@@ -87,7 +87,7 @@ impl vm::Env for VMEnv {
         }
     }
 
-    fn get_external_data(&self, eid: i64, vid: i64) -> Result<Vec<u8>, Error> {
+    fn get_external_data(&self, eid: u64, vid: u64) -> Result<Vec<u8>, Error> {
         let mut mem: Vec<u8> = Vec::with_capacity(self.span_size as usize);
         let mut span = Span::create_writable(mem.as_mut_ptr(), self.span_size as usize);
         match (self.env.dis.get_external_data)(self.env.env, eid, vid, &mut span) {
