@@ -32,6 +32,24 @@ RUN chmod +rx /opt/osxcross
 RUN chmod +rx /opt/osxcross/target
 RUN chmod -R +rx /opt/osxcross/target/bin
 
+ENV PATH $PATH:/opt/osxcross/target/bin
+ENV MACOSX_DEPLOYMENT_TARGET 10.7
+
+RUN echo "1" | osxcross-macports install gmp && \
+    osxcross-macports clear-cache
+ENV OSXCROSS_MP_INC 1
+
+# RUN wget http://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz \
+#  && tar -xf gmp*.tar.xz \
+#  && rm gmp*.tar.xz \
+#  && cd gmp* \
+#  && CC=o64-clang CXX=o64-clang++ ./configure --prefix=/opt/osxcross/target --enable-shared --enable-static --enable-fft \
+#     --enable-cxx --build=x86_64-unknown-linux-gnu --host x86_64-apple-darwin \
+#  && make -j$(nproc) \
+#  && make install \
+#  && cd .. \
+#  && rm -rf gmp*
+
 ## TODO: add support for windows cross-compile
 
 # PRE-FETCH MANY DEPS
@@ -55,4 +73,5 @@ RUN mkdir /.cargo
 RUN chmod +rx /.cargo
 COPY go-owasm/build/cargo-config /.cargo/config
 
+# ENV LD_LIBRARY_PATH /opt/osxcross/target/bin
 CMD ["/opt/build_osx.sh"]
