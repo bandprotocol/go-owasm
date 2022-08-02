@@ -84,11 +84,11 @@ func TestInvaildSignature(t *testing.T) {
 	wasm := wat2wasm([]byte(`(module
 		(func (param i64 i64 i32 i64)
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -110,11 +110,11 @@ func TestGasLimit(t *testing.T) {
 		(type (func (param i64 i64 i32 i64) (result i64)))
 		(func
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -123,6 +123,7 @@ func TestGasLimit(t *testing.T) {
 		(export "execute" (func 1)))
 	  `))
 	code, err := vm.Compile(wasm, spanSize)
+	require.NoError(t, err)
 	output, err := vm.Prepare(code, 100000, 1024, NewMockEnv([]byte("")))
 	require.NoError(t, err)
 	require.Equal(t, RunOutput{GasUsed: 80004}, output)
@@ -139,11 +140,11 @@ func TestCompileErrorNoMemory(t *testing.T) {
 		(type (func (param i64 i64 i32 i64) (result i64)))
 		(func
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -165,11 +166,11 @@ func TestCompileErrorMinimumMemoryExceed(t *testing.T) {
 		(type (func (param i64 i64 i32 i64) (result i64)))
 		(func
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -184,11 +185,11 @@ func TestCompileErrorMinimumMemoryExceed(t *testing.T) {
 		(type (func (param i64 i64 i32 i64) (result i64)))
 		(func
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -210,11 +211,11 @@ func TestCompileErrorSetMaximumMemory(t *testing.T) {
 		(type (func (param i64 i64 i32 i64) (result i64)))
 		(func
 		  (local $idx i32)
-		  (set_local $idx (i32.const 0))
+		  (local.set $idx (i32.const 0))
 		  (block
 			  (loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 10000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 10000)))
 			  )
 			))
 		(func)
@@ -238,11 +239,11 @@ func TestCompileErrorCheckWasmImports(t *testing.T) {
 		(import "env" "beeb" (func (type 0)))
 		(func
 		(local $idx i32)
-		(set_local $idx (i32.const 0))
+		(local.set $idx (i32.const 0))
 		(block
 				(loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 1000000000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 1000000000)))
 				)
 			)
 		)
@@ -267,11 +268,11 @@ func TestCompileErrorCheckWasmExports(t *testing.T) {
 		(import "env" "ask_external_data" (func (type 0)))
 		(func
 		(local $idx i32)
-		(set_local $idx (i32.const 0))
+		(local.set $idx (i32.const 0))
 		(block
 				(loop
-				(set_local $idx (get_local $idx) (i32.const 1) (i32.add) )
-				(br_if 0 (i32.lt_u (get_local $idx) (i32.const 1000000000)))
+				(local.set $idx (local.get $idx) (i32.const 1) (i32.add) )
+				(br_if 0 (i32.lt_u (local.get $idx) (i32.const 1000000000)))
 				)
 			)
 		)
