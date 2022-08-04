@@ -1,7 +1,8 @@
 ## Generate cbindgen for go
 
 ````
-cbindgen --config cbindgen.toml  --output api/bindings.h
+cd libgo_owasm
+cbindgen --config cbindgen.toml  --output ../api/bindings.h
 ```
 
 ## Build shared object library
