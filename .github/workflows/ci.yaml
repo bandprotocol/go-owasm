@@ -46,7 +46,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --manifest-path Cargo.toml --all
+          args: --manifest-path libgo_owasm/Cargo.toml --all
 
       - name: Run go tests
         run: go test ./...
