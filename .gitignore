@@ -1,1 +1,3 @@
-/target
+.vscode
+
+libgo_owasm/target

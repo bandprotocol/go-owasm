@@ -46,26 +46,6 @@ func (e *Env) GetExternalData(eid int64, vid int64) []byte {
 	return []byte("switez")
 }
 
-// func Wat2Wasm(fileName string, spanSize int) error {
-// 	code, _ := ioutil.ReadFile(fmt.Sprintf("./wasm/%s.wat", fileName))
-// 	wasm, err := api.Wat2Wasm(code, spanSize)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	fmt.Println("wasm:", wasm)
-// 	f, err := os.Create(fmt.Sprintf("./wasm/%s.wasm", fileName))
-// 	defer f.Close()
-// 	n, err := f.Write(wasm)
-// 	fmt.Printf("wrote %d bytes\n", n)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	f.Sync()
-
-// 	return nil
-// }
-
 func main() {
 	fmt.Println("Hello, World!")
 }
