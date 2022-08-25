@@ -30,5 +30,5 @@ pub struct Env {
 
 #[repr(C)]
 pub struct RunOutput {
-    pub gas_used: u32,
+    pub gas_used: u64,
 }

@@ -78,7 +78,7 @@ typedef struct Env {
 } Env;
 
 typedef struct RunOutput {
-  uint32_t gas_used;
+  uint64_t gas_used;
 } RunOutput;
 
 struct cache_t *init_cache(uint32_t size);
@@ -89,7 +89,7 @@ Error do_compile(struct Span input, struct Span *output);
 
 Error do_run(struct cache_t *cache,
              struct Span code,
-             uint32_t gas_limit,
+             uint64_t gas_limit,
              int64_t span_size,
              bool is_prepare,
              struct Env env,

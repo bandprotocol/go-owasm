@@ -66,7 +66,7 @@ pub extern "C" fn do_compile(input: Span, output: &mut Span) -> Error {
 pub extern "C" fn do_run(
     cache: *mut cache_t,
     code: Span,
-    gas_limit: u32,
+    gas_limit: u64,
     span_size: i64,
     is_prepare: bool,
     env: Env,
