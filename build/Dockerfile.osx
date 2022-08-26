@@ -5,7 +5,7 @@ FROM rust:1.60.0-bullseye
 
 RUN rustup update
 RUN apt-get update
-RUN apt install -y clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev libgmp10 php-gmp
+RUN apt install -y clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev
 RUN apt install -y build-essential wget cmake
 
 
@@ -44,7 +44,6 @@ RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
 # PRE-FETCH MANY DEPS
 WORKDIR /scratch
 COPY go-owasm /scratch/go-owasm
-COPY ../owasm /scratch/owasm
 RUN cd go-owasm/libgo_owasm && cargo fetch
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo

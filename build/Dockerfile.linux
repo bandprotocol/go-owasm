@@ -22,7 +22,6 @@ RUN url="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustu
 # PRE-FETCH MANY DEPS
 WORKDIR /scratch
 COPY go-owasm /scratch/go-owasm
-COPY ../owasm /scratch/owasm
 RUN cd go-owasm/libgo_owasm && cargo fetch
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo
