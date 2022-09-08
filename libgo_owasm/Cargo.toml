@@ -8,7 +8,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm-vm = "0.1.12"
+owasm-vm = "0.2.0"
 failure = "0.1.6"
 
 [build-dependencies]

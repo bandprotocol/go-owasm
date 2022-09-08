@@ -25,6 +25,8 @@ enum Error {
   Error_OutOfGasError = 12,
   Error_BadEntrySignatureError = 13,
   Error_MemoryOutOfBoundError = 14,
+  Error_UninitializedContextData = 15,
+  Error_ChecksumLengthNotMatch = 16,
   Error_WrongPeriodActionError = 128,
   Error_TooManyExternalDataError = 129,
   Error_DuplicateExternalIDError = 130,
