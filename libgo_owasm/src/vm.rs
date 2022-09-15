@@ -4,25 +4,37 @@ use crate::span::Span;
 use owasm_vm::error::Error;
 use owasm_vm::vm;
 
-pub struct VMEnv {
+pub struct VMApi {
+    span_size: i64, // Maximum span size for communication between Rust & Go.
+}
+
+impl VMApi {
+    pub fn new(span_size: i64) -> VMApi {
+        VMApi { span_size: span_size }
+    }
+}
+
+impl vm::BackendApi for VMApi {
+    fn get_span_size(&self) -> i64 {
+        self.span_size
+    }
+}
+
+pub struct VMQuerier {
     env: Env,       // The execution environment for callbacks to Golang.
     span_size: i64, // Maximum span size for communication between Rust & Go.
 }
 
-impl VMEnv {
-    pub fn new(env: Env, span_size: i64) -> VMEnv {
-        VMEnv {
+impl VMQuerier {
+    pub fn new(env: Env, span_size: i64) -> VMQuerier {
+        VMQuerier {
             env: env,
             span_size: span_size,
         }
     }
 }
 
-impl vm::Env for VMEnv {
-    fn get_span_size(&self) -> i64 {
-        self.span_size
-    }
-
+impl vm::Querier for VMQuerier {
     fn get_calldata(&self) -> Result<Vec<u8>, Error> {
         let mut mem: Vec<u8> = Vec::with_capacity(self.span_size as usize);
         let mut span = Span::create_writable(mem.as_mut_ptr(), self.span_size as usize);
