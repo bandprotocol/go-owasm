@@ -2,6 +2,8 @@ package api
 
 // #include "bindings.h"
 //
+// int64_t cGetSpanSize(env_t *e);
+// int64_t cGetSpanSize_cgo(env_t *e) { return cGetSpanSize(e); }
 // Error cGetCalldata(env_t *e, Span *calldata);
 // Error cGetCalldata_cgo(env_t *e, Span *calldata) { return cGetCalldata(e, calldata); }
 // Error cSetReturnData(env_t *e, Span data);

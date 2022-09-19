@@ -62,6 +62,7 @@ typedef struct env_t {
 } env_t;
 
 typedef struct EnvDispatcher {
+  int64_t (*get_span_size)(struct env_t*);
   Error (*get_calldata)(struct env_t*, struct Span *calldata);
   Error (*set_return_data)(struct env_t*, struct Span data);
   int64_t (*get_ask_count)(struct env_t*);
@@ -92,7 +93,6 @@ Error do_compile(struct Span input, struct Span *output);
 Error do_run(struct cache_t *cache,
              struct Span code,
              uint64_t gas_limit,
-             int64_t span_size,
              bool is_prepare,
              struct Env env,
              struct RunOutput *output);

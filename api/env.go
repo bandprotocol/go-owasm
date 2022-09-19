@@ -7,6 +7,7 @@ import (
 )
 
 type EnvInterface interface {
+	GetSpanSize() int64
 	GetCalldata() []byte
 	SetReturnData([]byte) error
 	GetAskCount() int64
@@ -25,6 +26,11 @@ type envIntl struct {
 
 func createEnvIntl(ext EnvInterface) *envIntl {
 	return &envIntl{ext: ext}
+}
+
+//export cGetSpanSize
+func cGetSpanSize(e *C.env_t) C.int64_t {
+	return C.int64_t((*(*envIntl)(unsafe.Pointer(e))).ext.GetSpanSize())
 }
 
 //export cGetCalldata

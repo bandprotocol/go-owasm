@@ -67,14 +67,13 @@ pub extern "C" fn do_run(
     cache: *mut cache_t,
     code: Span,
     gas_limit: u64,
-    span_size: i64,
     is_prepare: bool,
     env: Env,
     output: &mut RunOutput,
 ) -> Error {
     if !cache.is_null() {
-        let vm_env = vm::VMApi::new(span_size);
-        let vm_querier = vm::VMQuerier::new(env, span_size);
+        let vm_env = vm::VMApi::new();
+        let vm_querier = vm::VMQuerier::new(env);
         match owasm_vm::run(
             to_cache(cache).unwrap(),
             code.read(),
