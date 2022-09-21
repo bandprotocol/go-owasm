@@ -4,16 +4,6 @@ use crate::span::Span;
 use owasm_vm::error::Error;
 use owasm_vm::vm;
 
-pub struct VMApi {}
-
-impl VMApi {
-    pub fn new() -> VMApi {
-        VMApi {}
-    }
-}
-
-impl vm::BackendApi for VMApi {}
-
 pub struct VMQuerier {
     env: Env, // The execution environment for callbacks to Golang.
 }
