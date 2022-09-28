@@ -613,9 +613,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "owasm-vm"
-version = "0.1.12"
+version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ce5d7e5c9b0a05bc9cd6c393c9ca1875bc850d597ee2e44d3d02cefe5e3de87"
+checksum = "419472312548da2de145e3e431e473868ef53f07dc1e819e436b9b38e7c1de83"
 dependencies = [
  "assert_matches",
  "clru",

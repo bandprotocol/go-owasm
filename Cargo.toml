@@ -8,7 +8,7 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-owasm-vm = "0.1.12"
+owasm-vm = "0.1.13"
 failure = "0.1.6"
 
 [profile.release]
