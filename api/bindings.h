@@ -27,6 +27,8 @@ enum Error {
   Error_MemoryOutOfBoundError = 14,
   Error_UninitializedContextData = 15,
   Error_ChecksumLengthNotMatch = 16,
+  Error_DataLengthOutOfBound = 17,
+  Error_ConvertTypeOutOfBound = 18,
   Error_WrongPeriodActionError = 128,
   Error_TooManyExternalDataError = 129,
   Error_DuplicateExternalIDError = 130,

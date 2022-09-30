@@ -126,7 +126,7 @@ func TestGasLimit(t *testing.T) {
 	require.NoError(t, err)
 	output, err := vm.Prepare(code, 250000000000, NewMockEnv([]byte(""), 1024))
 	require.NoError(t, err)
-	require.Equal(t, RunOutput{GasUsed: 68769375000}, output)
+	require.Equal(t, RunOutput{GasUsed: 70519550000}, output)
 	_, err = vm.Prepare(code, 60000000000, NewMockEnv([]byte(""), 1024))
 	require.Equal(t, ErrOutOfGas, err)
 }
