@@ -25,6 +25,10 @@ enum Error {
   Error_OutOfGasError = 12,
   Error_BadEntrySignatureError = 13,
   Error_MemoryOutOfBoundError = 14,
+  Error_UninitializedContextData = 15,
+  Error_ChecksumLengthNotMatch = 16,
+  Error_DataLengthOutOfBound = 17,
+  Error_ConvertTypeOutOfBound = 18,
   Error_WrongPeriodActionError = 128,
   Error_TooManyExternalDataError = 129,
   Error_DuplicateExternalIDError = 130,
@@ -60,6 +64,7 @@ typedef struct env_t {
 } env_t;
 
 typedef struct EnvDispatcher {
+  int64_t (*get_span_size)(struct env_t*);
   Error (*get_calldata)(struct env_t*, struct Span *calldata);
   Error (*set_return_data)(struct env_t*, struct Span data);
   int64_t (*get_ask_count)(struct env_t*);
@@ -78,7 +83,7 @@ typedef struct Env {
 } Env;
 
 typedef struct RunOutput {
-  uint32_t gas_used;
+  uint64_t gas_used;
 } RunOutput;
 
 struct cache_t *init_cache(uint32_t size);
@@ -89,8 +94,7 @@ Error do_compile(struct Span input, struct Span *output);
 
 Error do_run(struct cache_t *cache,
              struct Span code,
-             uint32_t gas_limit,
-             int64_t span_size,
+             uint64_t gas_limit,
              bool is_prepare,
              struct Env env,
              struct RunOutput *output);

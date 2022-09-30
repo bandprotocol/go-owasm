@@ -9,6 +9,7 @@ pub struct env_t {
 #[repr(C)]
 // A struct representing the set of functions Rust can call back to Golang.
 pub struct EnvDispatcher {
+    pub get_span_size: extern "C" fn(*mut env_t) -> i64,
     pub get_calldata: extern "C" fn(*mut env_t, calldata: &mut Span) -> Error,
     pub set_return_data: extern "C" fn(*mut env_t, data: Span) -> Error,
     pub get_ask_count: extern "C" fn(*mut env_t) -> i64,
@@ -30,5 +31,5 @@ pub struct Env {
 
 #[repr(C)]
 pub struct RunOutput {
-    pub gas_used: u32,
+    pub gas_used: u64,
 }

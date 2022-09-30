@@ -3,6 +3,8 @@ package api
 // #cgo LDFLAGS: -Wl,-rpath,${SRCDIR} -L${SRCDIR} -lgo_owasm
 // #include "bindings.h"
 //
+// typedef int64_t (*get_span_size_fn)(env_t*);
+// int64_t cGetSpanSize_cgo(env_t *e);
 // typedef Span (*get_calldata_fn)(env_t*);
 // Span cGetCalldata_cgo(env_t *e);
 // typedef void (*set_return_data_fn)(env_t*, Span);
@@ -29,7 +31,7 @@ import (
 )
 
 type RunOutput struct {
-	GasUsed uint32
+	GasUsed uint64
 }
 
 type Vm struct {
@@ -57,22 +59,23 @@ func (vm Vm) Compile(code []byte, spanSize int) ([]byte, error) {
 	return readSpan(outputSpan), err
 }
 
-func (vm Vm) Prepare(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
-	return vm.run(code, gasLimit, spanSize, true, env)
+func (vm Vm) Prepare(code []byte, gasLimit uint64, env EnvInterface) (RunOutput, error) {
+	return vm.run(code, gasLimit, true, env)
 }
 
-func (vm Vm) Execute(code []byte, gasLimit uint32, spanSize int64, env EnvInterface) (RunOutput, error) {
-	return vm.run(code, gasLimit, spanSize, false, env)
+func (vm Vm) Execute(code []byte, gasLimit uint64, env EnvInterface) (RunOutput, error) {
+	return vm.run(code, gasLimit, false, env)
 }
 
-func (vm Vm) run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, env EnvInterface) (RunOutput, error) {
+func (vm Vm) run(code []byte, gasLimit uint64, isPrepare bool, env EnvInterface) (RunOutput, error) {
 	codeSpan := copySpan(code)
 	defer freeSpan(codeSpan)
 	envIntl := createEnvIntl(env)
 	output := C.RunOutput{}
-	err := toGoError(C.do_run(vm.cache.ptr, codeSpan, C.uint32_t(gasLimit), C.int64_t(spanSize), C.bool(isPrepare), C.Env{
+	err := toGoError(C.do_run(vm.cache.ptr, codeSpan, C.uint64_t(gasLimit), C.bool(isPrepare), C.Env{
 		env: (*C.env_t)(unsafe.Pointer(envIntl)),
 		dis: C.EnvDispatcher{
+			get_span_size:            C.get_span_size_fn(C.cGetSpanSize_cgo),
 			get_calldata:             C.get_calldata_fn(C.cGetCalldata_cgo),
 			set_return_data:          C.set_return_data_fn(C.cSetReturnData_cgo),
 			get_ask_count:            C.get_ask_count_fn(C.cGetAskCount_cgo),
@@ -88,7 +91,7 @@ func (vm Vm) run(code []byte, gasLimit uint32, spanSize int64, isPrepare bool, e
 	if err != nil {
 		return RunOutput{}, err
 	} else {
-		return RunOutput{GasUsed: uint32(output.gas_used)}, nil
+		return RunOutput{GasUsed: uint64(output.gas_used)}, nil
 	}
 }
 

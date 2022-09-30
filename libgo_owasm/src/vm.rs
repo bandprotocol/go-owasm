@@ -4,28 +4,24 @@ use crate::span::Span;
 use owasm_vm::error::Error;
 use owasm_vm::vm;
 
-pub struct VMEnv {
-    env: Env,       // The execution environment for callbacks to Golang.
-    span_size: i64, // Maximum span size for communication between Rust & Go.
+pub struct VMQuerier {
+    env: Env, // The execution environment for callbacks to Golang.
 }
 
-impl VMEnv {
-    pub fn new(env: Env, span_size: i64) -> VMEnv {
-        VMEnv {
-            env: env,
-            span_size: span_size,
-        }
+impl VMQuerier {
+    pub fn new(env: Env) -> VMQuerier {
+        VMQuerier { env: env }
     }
 }
 
-impl vm::Env for VMEnv {
+impl vm::Querier for VMQuerier {
     fn get_span_size(&self) -> i64 {
-        self.span_size
+        (self.env.dis.get_span_size)(self.env.env)
     }
 
     fn get_calldata(&self) -> Result<Vec<u8>, Error> {
-        let mut mem: Vec<u8> = Vec::with_capacity(self.span_size as usize);
-        let mut span = Span::create_writable(mem.as_mut_ptr(), self.span_size as usize);
+        let mut mem: Vec<u8> = Vec::with_capacity(self.get_span_size() as usize);
+        let mut span = Span::create_writable(mem.as_mut_ptr(), self.get_span_size() as usize);
         match (self.env.dis.get_calldata)(self.env.env, &mut span) {
             Error::NoError => {
                 unsafe {
@@ -88,8 +84,8 @@ impl vm::Env for VMEnv {
     }
 
     fn get_external_data(&self, eid: i64, vid: i64) -> Result<Vec<u8>, Error> {
-        let mut mem: Vec<u8> = Vec::with_capacity(self.span_size as usize);
-        let mut span = Span::create_writable(mem.as_mut_ptr(), self.span_size as usize);
+        let mut mem: Vec<u8> = Vec::with_capacity(self.get_span_size() as usize);
+        let mut span = Span::create_writable(mem.as_mut_ptr(), self.get_span_size() as usize);
         match (self.env.dis.get_external_data)(self.env.env, eid, vid, &mut span) {
             Error::NoError => {
                 unsafe {

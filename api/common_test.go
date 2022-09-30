@@ -55,14 +55,20 @@ type MockEnv struct {
 	Calldata    []byte
 	Retdata     []byte
 	rawRequests []RawRequest
+	SpanSize    int64
 }
 
-func NewMockEnv(calldata []byte) *MockEnv {
+func NewMockEnv(calldata []byte, spanSize int64) *MockEnv {
 	return &MockEnv{
 		Calldata:    calldata,
 		Retdata:     []byte{},
 		rawRequests: []RawRequest{},
+		SpanSize:    spanSize,
 	}
+}
+
+func (env *MockEnv) GetSpanSize() int64 {
+	return env.SpanSize
 }
 
 func (env *MockEnv) GetCalldata() []byte {

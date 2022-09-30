@@ -1,38 +1,33 @@
-# Currently unavailable
-# FROM rust:1.39
-# We need nightly currently for compiling with singlepass
-FROM rustlang/rust:nightly
+FROM rust:1.60.0-bullseye
 
+ENV PATH=/opt/osxcross/target/bin:$PATH
+
+RUN rustup update
 RUN apt-get update
 RUN apt install -y clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev
 RUN apt install -y build-essential wget cmake
 
-
-# add some llvm configs for later - how to cross-compile this in wasmer-llvm-backend???
-RUN echo deb http://deb.debian.org/debian buster-backports main >> /etc/apt/sources.list
-RUN apt-get update
-RUN apt install -y libllvm8 llvm-8 llvm-8-dev llvm-8-runtime
-ENV LLVM_SYS_80_PREFIX=/usr/lib/llvm-8
-
 ## ADD MACOS SUPPORT
-
 WORKDIR /opt
 
 # Pin to proper nightly and add macOS Rust target
-RUN rustup default nightly-2020-06-08
 RUN rustup target add x86_64-apple-darwin
 
 # Build osxcross
-RUN git clone https://github.com/tpoechtrager/osxcross
-RUN cd osxcross && \
-    wget -nc https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz && \
-    mv MacOSX10.10.sdk.tar.xz tarballs/ && \
-    UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+RUN git clone https://github.com/tpoechtrager/osxcross \
+    && cd osxcross \
+    # Don't change file name when downloading because osxcross auto-detects the version from the name
+    && wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz \
+    && mv MacOSX11.3.sdk.tar.xz tarballs/ \
+    && UNATTENDED=yes OSX_VERSION_MIN=10.10 ./build.sh \
+    # Install gmp
+    && echo "1" | MACOSX_DEPLOYMENT_TARGET=10.10 ./tools/osxcross-macports install gmp \
+    # Cleanups before Docker layer is finalized
+    && rm -r tarballs/
 RUN chmod +rx /opt/osxcross
 RUN chmod +rx /opt/osxcross/target
 RUN chmod -R +rx /opt/osxcross/target/bin
-
-## TODO: add support for windows cross-compile
+RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
 
 # PRE-FETCH MANY DEPS
 WORKDIR /scratch

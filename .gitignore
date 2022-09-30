@@ -1,3 +1,4 @@
 .vscode
 
 libgo_owasm/target
+.DS_Store
