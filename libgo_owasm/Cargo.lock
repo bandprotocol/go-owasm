@@ -444,7 +444,7 @@ dependencies = [
 
 [[package]]
 name = "go-owasm"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "cbindgen",
  "failure",
@@ -703,9 +703,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "owasm-crypto"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f167dd485f02b880e035872f43c6fe114bc3274490b342a8a7f27173042f614e"
+checksum = "002889f6de972f333d744c2968ea1c83192441b7c389978f892a7d8d72d3785a"
 dependencies = [
  "hex",
  "lazy_static",
@@ -716,9 +716,9 @@ dependencies = [
 
 [[package]]
 name = "owasm-vm"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2d19dc133f28de1c37bfe435d844c37255c8990a8ef281d1683823fe675ace88"
+checksum = "a1d822db08bda6416881d3c9d55f1a4a0a2c348a452a02901304517fab92b6e4"
 dependencies = [
  "assert_matches",
  "clru",
