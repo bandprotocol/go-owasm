@@ -1,6 +1,5 @@
 package api
 
-// #cgo LDFLAGS: -Wl,-rpath,${SRCDIR} -L${SRCDIR} -lgo_owasm
 // #include "bindings.h"
 //
 // typedef int64_t (*get_span_size_fn)(env_t*);

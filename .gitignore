@@ -2,3 +2,6 @@
 
 libgo_owasm/target
 .DS_Store
+
+# no static libraries (35MB+)
+lib*.a
