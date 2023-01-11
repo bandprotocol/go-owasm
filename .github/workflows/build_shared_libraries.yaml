@@ -27,14 +27,14 @@ jobs:
         run: |
           ls -l ./api
 
-      - name: Print diff
-        run: |
-          git diff
+      # - name: Print diff
+      #   run: |
+      #     git diff
 
-      - name: Check if there is any change
-        id: check-diff
-        run: |
-          git diff --quiet || echo "::set-output name=diff::true"
+      # - name: Check if there is any change
+      #   id: check-diff
+      #   run: |
+      #     git diff --quiet || echo "::set-output name=diff::true"
 
       - name: Config and push new libraries
         if: steps.check-diff.outputs.diff == 'true'
