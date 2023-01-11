@@ -10,19 +10,28 @@ jobs:
   push_shared_libraries:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Build docker for Linux
-        run: make docker-image-linux
-      - name: Build shared library for Linux
-        run: make release-linux
-      - name: Build docker for macOS
-        run: make docker-image-osx
-      - name: Build shared library for macOS
-        run: make release-osx
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build docker
+        run: |
+          make docker-image-linux
+          make docker-image-osx
+
+      - name: Build shared libraries
+        run: |
+          make release-linux
+          make release-osx
+
+      - name: Check output
+        run: |
+          ls -l ./api
+
       - name: Check if there is any change
         id: check-diff
         run: |
           git diff --quiet || echo "::set-output name=diff::true"
+
       - name: Config and push new libraries
         if: steps.check-diff.outputs.diff == 'true'
         run: |
