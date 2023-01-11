@@ -1,0 +1,43 @@
+name: Build workflow
+
+on:
+  push:
+    paths:
+      - '.github/workflows/buid.yaml'
+      - 'api/binding.h'
+      - 'api/libgo_owasm.dylib'
+      - 'api/libgo_owasm.so'
+      - 'libgo_owasm/**'
+      - 'build/**'
+      - 'Makefile'
+
+jobs:
+  build_shared_libs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build docker images
+        run: |
+          make docker-image-linux
+          make docker-image-osx
+
+      - name: Build shared libs
+        run: |
+          make release-linux
+          make release-osx
+
+      - name: Check if there is any change
+        id: check-diff
+        run: |
+          git add -A
+          git diff HEAD --quiet || echo "::set-output name=diff::true"
+
+      - name: Commit and Push libs
+        if: steps.check-diff.outputs.diff == 'true'
+        run: |
+          git config --global user.name 'Builder'
+          git config --global user.email 'go-owasm@users.noreply.github.com'
+          git commit -am "Built shared libs"
+          git push

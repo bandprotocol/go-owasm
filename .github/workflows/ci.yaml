@@ -1,42 +1,9 @@
 name: CI workflow
-on: push
+on: [push]
 
 jobs:
-  build_shared_libs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Build docker images
-        run: |
-          make docker-image-linux
-          make docker-image-osx
-
-      - name: Build shared libs
-        run: |
-          make release-linux
-          make release-osx
-
-      # - name: Check if there is any change
-      #   id: check-diff
-      #   run: |
-      #     git diff --quiet || echo "::set-output name=diff::true"
-
-      - name: Commit and Push libs
-        # if: steps.check-diff.outputs.diff == 'true'
-        run: |
-          git config --global user.name 'BotGitHub'
-          git config --global user.email 'bandprotocol@users.noreply.github.com'
-          git add -A
-          git commit -am "Built shared libs"
-          git push
-
   go-wasm-test:
     runs-on: ubuntu-latest
-    needs: build_shared_libs
     steps:
       - name: Code checkout
         uses: actions/checkout@v2
@@ -74,6 +41,11 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-rust-owasmer-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build libgo_owasm
+        run: |
+          cd libgo_owasm && cargo build --release
+          cp libgo_owasm/target/release/libgo_owasm.so api/libgo_owasm.so
 
       - name: Run rust tests
         uses: actions-rs/cargo@v1
