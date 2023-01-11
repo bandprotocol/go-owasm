@@ -44,7 +44,7 @@ jobs:
 
       - name: Build libgo_owasm
         run: |
-          cd libgo_owasm && cargo build --release
+          (cd libgo_owasm && cargo build --release)
           cp libgo_owasm/target/release/libgo_owasm.so api/libgo_owasm.so
 
       - name: Run rust tests

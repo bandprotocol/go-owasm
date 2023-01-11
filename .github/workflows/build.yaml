@@ -3,7 +3,7 @@ name: Build workflow
 on:
   push:
     paths:
-      - '.github/workflows/buid.yaml'
+      - '.github/workflows/build.yaml'
       - 'api/binding.h'
       - 'api/libgo_owasm.dylib'
       - 'api/libgo_owasm.so'
@@ -32,7 +32,7 @@ jobs:
         id: check-diff
         run: |
           git add -A
-          git diff HEAD --quiet || echo "::set-output name=diff::true"
+          git diff HEAD --quiet || echo "diff=true" >> $GITHUB_OUTPUT
 
       - name: Commit and Push libs
         if: steps.check-diff.outputs.diff == 'true'
