@@ -1,0 +1,48 @@
+name: Build and Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - master
+      
+jobs:
+  push_shared_libraries:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build docker for Linux
+        run: make docker-image-linux
+      - name: Build shared library for Linux
+        run: make release-build-linux
+      - name: Build docker for macOS
+        run: make docker-image-macos
+      - name: Build shared library for macOS
+        run: make release-build-macos
+      - name: Config and push new libraries
+        run: |
+          git config --global user.name 'bandbot'
+          git config --global user.email 'bandprotocol@users.noreply.github.com'
+          git commit -am "Built release libraries"
+          git push
+
+  # build_static_lib:
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Build static library for Alpine
+  #       run: make release-build-alpine
+  #     - name: Debug build results
+  #       run: ls -l ./internal/api
+  #     - name: Collect artifacts
+  #       run: |
+  #         mkdir artifacts
+  #         cp ./internal/api/libwasmvm_muslc.x86_64.a artifacts/libwasmvm_muslc.x86_64.a
+  #     - name: Create checksums
+  #       working-directory: artifacts
+  #       run: sha256sum * > checksums.txt && cat checksums.txt
+  #     - name: Store artifacts
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: artifacts
+  #         path: artifacts
