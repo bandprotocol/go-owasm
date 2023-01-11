@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build shared libraries
 
 on:
   workflow_dispatch:
@@ -14,11 +14,11 @@ jobs:
       - name: Build docker for Linux
         run: make docker-image-linux
       - name: Build shared library for Linux
-        run: make release-build-linux
+        run: make release-linux
       - name: Build docker for macOS
         run: make docker-image-macos
       - name: Build shared library for macOS
-        run: make release-build-macos
+        run: make release-macos
       - name: Config and push new libraries
         run: |
           git config --global user.name 'bandbot'
