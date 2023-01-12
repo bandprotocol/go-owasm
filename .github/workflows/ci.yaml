@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Rust and rust toolchain
         uses: actions-rs/toolchain@v1
@@ -15,7 +15,7 @@ jobs:
           override: true
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: '^1.18.3'
 
@@ -26,7 +26,7 @@ jobs:
           sudo cp wabt-1.0.29/bin/wat2wasm /usr/local/bin
 
       - name: Check go mod cache
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-owasmer-${{ hashFiles('**/go.sum') }}
@@ -34,7 +34,7 @@ jobs:
             ${{ runner.os }}-go-owasmer-
 
       - name: Check cargo cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo/registry
