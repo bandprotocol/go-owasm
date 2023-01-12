@@ -43,5 +43,5 @@ jobs:
         run: |
           git config --global user.name 'Builder'
           git config --global user.email 'go-owasm@users.noreply.github.com'
-          git commit -am "[skip ci] Built shared libs"
+          git commit -am "Built shared libs"
           git push
