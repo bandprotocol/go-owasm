@@ -29,8 +29,11 @@ jobs:
         working-directory: artifacts
         run: sha256sum * > checksums.txt && cat checksums.txt
 
-      - name: Store artifacts
-        uses: actions/upload-artifact@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: artifacts
-          path: artifacts
+          files: |
+            artifacts/checksums.txt
+            artifacts/libgo_owasm_muslc.x86_64.a
+
