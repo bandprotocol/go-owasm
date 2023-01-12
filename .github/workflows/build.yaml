@@ -2,6 +2,10 @@ name: Build workflow
 
 on:
   push:
+    branches-ignore:
+      - 'master'
+    tags-ignore:
+      - '**'
     paths:
       - '.github/workflows/build.yaml'
       - 'api/binding.h'
@@ -37,7 +41,5 @@ jobs:
       - name: Commit and Push libs
         if: steps.check-diff.outputs.diff == 'true'
         run: |
-          git config --global user.name 'Builder'
-          git config --global user.email 'go-owasm@users.noreply.github.com'
           git commit -am "Built shared libs"
           git push

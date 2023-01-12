@@ -23,7 +23,7 @@ jobs:
       - name: Collect artifacts
         run: |
           mkdir artifacts
-          cp ./internal/api/libgo_owasm_muslc.x86_64.a artifacts/libgo_owasm_muslc.x86_64.a
+          cp api/libgo_owasm_muslc.x86_64.a artifacts/libgo_owasm_muslc.x86_64.a
 
       - name: Create checksums
         working-directory: artifacts
