@@ -35,6 +35,7 @@ RUN rm -rf /scratch
 COPY go-owasm/build/build_linux.sh /opt
 RUN chmod +x /opt/build*
 
+# add config cargo
 RUN mkdir /.cargo
 RUN chmod +rx /.cargo
 COPY go-owasm/build/cargo-config /.cargo/config

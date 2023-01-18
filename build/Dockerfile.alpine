@@ -36,6 +36,7 @@ RUN rustup target add x86_64-unknown-linux-musl
 COPY go-owasm/build/build_alpine.sh /opt
 RUN chmod +x /opt/build*
 
+# add config cargo
 RUN mkdir /.cargo
 RUN chmod +rx /.cargo
 COPY go-owasm/build/cargo-config /.cargo/config
