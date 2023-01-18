@@ -19,7 +19,7 @@ RUN url="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustu
     cargo --version; \
     rustc --version;
 
-# PRE-FETCH MANY DEPS
+# pre-fetch many deps
 WORKDIR /scratch
 COPY go-owasm /scratch/go-owasm
 RUN cd go-owasm/libgo_owasm && cargo fetch
@@ -27,10 +27,11 @@ RUN cd go-owasm/libgo_owasm && cargo fetch
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo
 
-## COPY BUILD SCRIPTS
+# cleanup
 WORKDIR /code
 RUN rm -rf /scratch
 
+# copy build scripts
 COPY go-owasm/build/build_linux.sh /opt
 RUN chmod +x /opt/build*
 
