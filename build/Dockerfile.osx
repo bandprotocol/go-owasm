@@ -11,7 +11,7 @@ RUN apt install -y build-essential wget cmake
 WORKDIR /opt
 
 # pin to proper nightly and add macOS Rust target
-RUN rustup target add x86_64-apple-darwin
+RUN rustup target add x86_64-apple-darwin aarch64-apple-darwin
 
 # build osxcross
 RUN git clone https://github.com/tpoechtrager/osxcross \
@@ -28,6 +28,7 @@ RUN chmod +rx /opt/osxcross
 RUN chmod +rx /opt/osxcross/target
 RUN chmod -R +rx /opt/osxcross/target/bin
 RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
+RUN /opt/osxcross/target/bin/aarch64-apple-darwin20.4-clang --version
 
 # pre-fetch many deps
 WORKDIR /scratch
