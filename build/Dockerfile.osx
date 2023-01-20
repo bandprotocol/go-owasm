@@ -11,7 +11,7 @@ RUN apt install -y build-essential wget cmake
 WORKDIR /opt
 
 # pin to proper nightly and add macOS Rust target
-RUN rustup target add x86_64-apple-darwin
+RUN rustup target add x86_64-apple-darwin aarch64-apple-darwin
 
 # build osxcross
 RUN git clone https://github.com/tpoechtrager/osxcross \
@@ -21,13 +21,14 @@ RUN git clone https://github.com/tpoechtrager/osxcross \
     && mv MacOSX11.3.sdk.tar.xz tarballs/ \
     && UNATTENDED=yes OSX_VERSION_MIN=10.10 ./build.sh \
     # install gmp
-    && echo "1" | MACOSX_DEPLOYMENT_TARGET=10.10 ./tools/osxcross-macports install gmp \
+    && echo "1" | MACOSX_DEPLOYMENT_TARGET=11.3 ./tools/osxcross-macports install gmp \
     # cleanups before Docker layer is finalized
     && rm -r tarballs/
 RUN chmod +rx /opt/osxcross
 RUN chmod +rx /opt/osxcross/target
 RUN chmod -R +rx /opt/osxcross/target/bin
 RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
+RUN /opt/osxcross/target/bin/aarch64-apple-darwin20.4-clang --version
 
 # pre-fetch many deps
 WORKDIR /scratch

@@ -29,6 +29,7 @@ release-linux:
 release-osx:
 	rm -rf libgo_owasm/target/release
 	rm -rf libgo_owasm/target/x86_64-apple-darwin/release
+	rm -rf libgo_owasm/target/aarch64-apple-darwin/release
 	docker run --rm -u $(USER_ID):$(USER_GROUP) -v $(shell pwd):/code/go-owasm owasm/go-ext-builder:$(DOCKER_TAG)-osx
 
 releases:
