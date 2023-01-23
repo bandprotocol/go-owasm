@@ -7,44 +7,47 @@ RUN apt-get update
 RUN apt install -y clang gcc g++ zlib1g-dev libmpc-dev libmpfr-dev libgmp-dev
 RUN apt install -y build-essential wget cmake
 
-## ADD MACOS SUPPORT
+# add macos support
 WORKDIR /opt
 
-# Pin to proper nightly and add macOS Rust target
-RUN rustup target add x86_64-apple-darwin
+# pin to proper nightly and add macOS Rust target
+RUN rustup target add x86_64-apple-darwin aarch64-apple-darwin
 
-# Build osxcross
+# build osxcross
 RUN git clone https://github.com/tpoechtrager/osxcross \
     && cd osxcross \
-    # Don't change file name when downloading because osxcross auto-detects the version from the name
+    # don't change file name when downloading because osxcross auto-detects the version from the name
     && wget -nc https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz \
     && mv MacOSX11.3.sdk.tar.xz tarballs/ \
     && UNATTENDED=yes OSX_VERSION_MIN=10.10 ./build.sh \
-    # Install gmp
-    && echo "1" | MACOSX_DEPLOYMENT_TARGET=10.10 ./tools/osxcross-macports install gmp \
-    # Cleanups before Docker layer is finalized
+    # install gmp
+    && echo "1" | MACOSX_DEPLOYMENT_TARGET=11.3 ./tools/osxcross-macports install gmp \
+    # cleanups before Docker layer is finalized
     && rm -r tarballs/
 RUN chmod +rx /opt/osxcross
 RUN chmod +rx /opt/osxcross/target
 RUN chmod -R +rx /opt/osxcross/target/bin
 RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
+RUN /opt/osxcross/target/bin/aarch64-apple-darwin20.4-clang --version
 
-# PRE-FETCH MANY DEPS
+# pre-fetch many deps
 WORKDIR /scratch
 COPY go-owasm /scratch/go-owasm
 RUN cd go-owasm/libgo_owasm && cargo fetch
+
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo
 RUN chmod -R 777 /usr/local/rustup
 
-## COPY BUILD SCRIPTS
-
+# cleanup
 WORKDIR /code
 RUN rm -rf /scratch
 
+# copy build scripts
 COPY go-owasm/build/*.sh /opt/
 RUN chmod +x /opt/*.sh
 
+# add config cargo
 RUN mkdir /.cargo
 RUN chmod +rx /.cargo
 COPY go-owasm/build/cargo-config /.cargo/config

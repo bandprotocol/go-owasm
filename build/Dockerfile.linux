@@ -3,11 +3,10 @@ FROM centos:centos7
 RUN yum -y update
 RUN yum -y install clang gcc gcc-c++ make wget gmp-devel
 
-# GET FROM https://github.com/rust-lang/docker-rust-nightly
+# reference from https://github.com/rust-lang/docker-rust-nightly
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     PATH=/usr/local/cargo/bin:$PATH
-
 
 RUN url="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init"; \
     wget "$url"; \
@@ -19,21 +18,23 @@ RUN url="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustu
     cargo --version; \
     rustc --version;
 
-# PRE-FETCH MANY DEPS
+# pre-fetch many deps
 WORKDIR /scratch
 COPY go-owasm /scratch/go-owasm
 RUN cd go-owasm/libgo_owasm && cargo fetch
+
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo
 
-## COPY BUILD SCRIPTS
-
+# cleanup
 WORKDIR /code
 RUN rm -rf /scratch
 
+# copy build scripts
 COPY go-owasm/build/build_linux.sh /opt
 RUN chmod +x /opt/build*
 
+# add config cargo
 RUN mkdir /.cargo
 RUN chmod +rx /.cargo
 COPY go-owasm/build/cargo-config /.cargo/config

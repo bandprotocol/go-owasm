@@ -1,12 +1,12 @@
-name: go-owasm Workflow
-on: push
+name: CI workflow
+on: [push]
 
 jobs:
   go-wasm-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Code checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Rust and rust toolchain
         uses: actions-rs/toolchain@v1
@@ -15,7 +15,7 @@ jobs:
           override: true
 
       - name: Install Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: '^1.18.3'
 
@@ -26,7 +26,7 @@ jobs:
           sudo cp wabt-1.0.29/bin/wat2wasm /usr/local/bin
 
       - name: Check go mod cache
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-owasmer-${{ hashFiles('**/go.sum') }}
@@ -34,13 +34,18 @@ jobs:
             ${{ runner.os }}-go-owasmer-
 
       - name: Check cargo cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
             target
           key: ${{ runner.os }}-rust-owasmer-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build libgo_owasm
+        run: |
+          (cd libgo_owasm && cargo build --release)
+          cp libgo_owasm/target/release/libgo_owasm.so api/libgo_owasm.so
 
       - name: Run rust tests
         uses: actions-rs/cargo@v1

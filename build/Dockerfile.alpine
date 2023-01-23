@@ -1,0 +1,44 @@
+FROM golang:1.18.8-alpine
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+    CARGO_HOME=/usr/local/cargo \
+    PATH=/usr/local/cargo/bin:$PATH
+
+RUN set -eux \
+    && apk add --no-cache ca-certificates build-base linux-headers gmp-dev gmp git
+
+RUN wget "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-musl/rustup-init"; \
+    chmod +x rustup-init; \
+    ./rustup-init -y --no-modify-path --default-toolchain 1.60.0; \
+    rm rustup-init; \
+    chmod -R a+w $RUSTUP_HOME $CARGO_HOME;
+
+# prepare go cache dirs
+RUN mkdir -p /.cache/go-build
+RUN chmod -R 777 /.cache
+
+# pre-fetch many deps
+WORKDIR /scratch
+COPY go-owasm /scratch/go-owasm
+RUN cd go-owasm/libgo_owasm && cargo fetch
+
+# allow non-root user to download more deps later
+RUN chmod -R 777 /usr/local/cargo
+
+# cleanup
+WORKDIR /code
+RUN rm -rf /scratch
+
+# add musl Rust targets
+RUN rustup target add x86_64-unknown-linux-musl
+
+# copy build scripts
+COPY go-owasm/build/build_alpine.sh /opt
+RUN chmod +x /opt/build*
+
+# add config cargo
+RUN mkdir /.cargo
+RUN chmod +rx /.cargo
+COPY go-owasm/build/cargo-config /.cargo/config
+
+CMD ["/opt/build_alpine.sh"]

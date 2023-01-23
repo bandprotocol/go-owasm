@@ -7,6 +7,12 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib"]
 
+# reference from https://github.com/CosmWasm/wasmvm/blob/main/libwasmvm/Cargo.toml
+[[example]]
+name = "muslc"
+path = "src/lib.rs"
+crate-type = ["staticlib"]
+
 [dependencies]
 owasm-vm = "0.2.2"
 failure = "0.1.6"
