@@ -32,7 +32,7 @@ var (
 	ErrBadExternalID            = errors.New("bad external ID parameter")
 	ErrUnavailableExternalData  = errors.New("external data is not available")
 	ErrRepeatSetReturnData      = errors.New("set return data is called more than once")
-	ErrUnknown                  = errors.New("unknown error")
+	ErrUnknown                  = errors.New("unknown  error")
 )
 
 // toCError converts the given Golang error into Rust/C error.
