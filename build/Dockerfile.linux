@@ -10,7 +10,6 @@ RUN yum -y update \
     # "Support for cross-building user space programs is not currently provided as that would massively multiply
     # the number of packages."
     && yum -y install gcc-aarch64-linux-gnu gcc-c++-aarch64-linux-gnu \
-    && yum install -y gmp-devel-6.3.0-2.1.aarch64.rpm \
     # See https://stackoverflow.com/a/64920961
     && wget http://springdale.princeton.edu/data/springdale/7/x86_64/os/Computational/glibc-aarch64-linux-gnu-2.24-2.sdl7.2.noarch.rpm \
     && sha256sum glibc-aarch64-linux-gnu-2.24-2.sdl7.2.noarch.rpm | grep 8caf8654ba0c15e1792bf0aaa1ac0cd4ad94ac905e97d6ea0f0e56e9ca1f5e78 \
