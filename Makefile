@@ -23,6 +23,8 @@ release-alpine:
 # Creates a release build in a containerized build environment of the shared library for glibc Linux (.so)
 release-linux:
 	rm -rf libgo_owasm/target/release
+	rm -rf libgo_owasm/target/x86_64-unknown-linux-gnu/release
+	rm -rf libgo_owasm/target/aarch64-unknown-linux-gnu/release
 	docker run --rm -u $(USER_ID):$(USER_GROUP) -v $(shell pwd):/code/go-owasm owasm/go-ext-builder:$(DOCKER_TAG)-linux
 
 # Creates a release build in a containerized build environment of the shared library for macOS (.dylib)
