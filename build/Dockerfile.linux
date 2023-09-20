@@ -1,7 +1,7 @@
 FROM centos:centos7
 
 RUN yum -y update \
-    && yum -y install clang gcc gcc-c++ make wget \
+    && yum -y install clang gcc gcc-c++ make wget gmp-devel \
     # Obtain dependencies for cross compiling
     # The only prebuilt glibc was done by third party Computational
     && yum -y install epel-release \
