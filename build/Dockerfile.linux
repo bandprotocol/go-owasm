@@ -48,8 +48,8 @@ WORKDIR /code
 RUN rm -rf /scratch
 
 # copy build scripts
-COPY go-owasm/build/build_linux.sh /opt
-RUN chmod +x /opt/build*
+COPY go-owasm/build/*.sh /opt/
+RUN chmod +x /opt/*.sh
 
 # add config cargo
 RUN mkdir /.cargo
