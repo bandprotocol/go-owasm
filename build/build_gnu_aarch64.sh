@@ -16,4 +16,4 @@ export CFLAGS_aarch64_unknown_linux_gnu="--sysroot=/usr/aarch64-linux-gnu"
 export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
 export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUNNER="$qemu_aarch64"
 cargo build --release --target aarch64-unknown-linux-gnu
-cp target/aarch64-unknown-linux-gnu/release/libwasmvm.so  ./../api/libwasmvm.aarch64.so
+cp target/aarch64-unknown-linux-gnu/release/libgo_owasm.so  ./../api/libgo_owasm.aarch64.so

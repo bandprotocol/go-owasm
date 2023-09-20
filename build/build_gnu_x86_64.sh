@@ -10,4 +10,4 @@ echo "Starting x86_64-unknown-linux-gnu build"
 export CC=clang
 export CXX=clang++
 cargo build --release --target x86_64-unknown-linux-gnu
-cp target/x86_64-unknown-linux-gnu/release/libwasmvm.so artifacts/libwasmvm.x86_64.so
+cp target/x86_64-unknown-linux-gnu/release/libgo_owasm.so ./../api/libgo_owasm.x86_64.so
