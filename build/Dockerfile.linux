@@ -58,8 +58,8 @@ COPY go-owasm/build/cargo-config /.cargo/config
 
 # Download and install gmp-devel for AArch64
 RUN wget http://mirror.centos.org/altarch/7/os/aarch64/Packages/gmp-devel-6.0.0-15.el7.aarch64.rpm \
-    && rpm2cpio gmp-devel-6.0.0-15.el7.aarch64.rpm | cpio -idmv && \
-    mv usr/* /usr/ && \
+    && rpm2cpio gmp-devel-6.0.0-15.el7.aarch64.rpm | cpio -idmv \
+    && mv usr/* /usr/ \
     && rm gmp-devel-6.0.0-15.el7.aarch64.rpm
 
 # Copy the missing library libgcc_s.so that gcc does not provide
