@@ -1,4 +1,4 @@
-FROM rust:1.60.0-bullseye
+FROM rust:1.73.0-bullseye
 
 ENV PATH=/opt/osxcross/target/bin:$PATH
 
@@ -30,26 +30,20 @@ RUN chmod -R +rx /opt/osxcross/target/bin
 RUN /opt/osxcross/target/bin/x86_64-apple-darwin20.4-clang --version
 RUN /opt/osxcross/target/bin/aarch64-apple-darwin20.4-clang --version
 
-# pre-fetch many deps
-WORKDIR /scratch
-COPY go-owasm /scratch/go-owasm
-RUN cd go-owasm/libgo_owasm && cargo fetch
-
 # allow non-root user to download more deps later
 RUN chmod -R 777 /usr/local/cargo
 RUN chmod -R 777 /usr/local/rustup
 
-# cleanup
+# setup workdir
 WORKDIR /code
-RUN rm -rf /scratch
 
 # copy build scripts
-COPY go-owasm/build/*.sh /opt/
-RUN chmod +x /opt/*.sh
+COPY build/*.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/*.sh
 
 # add config cargo
 RUN mkdir /.cargo
 RUN chmod +rx /.cargo
-COPY go-owasm/build/cargo-config /.cargo/config
+COPY build/cargo-config /.cargo/config
 
-CMD ["/opt/build_osx.sh"]
+CMD ["bash", "-c", "echo 'Argument missing. Pass one build script (e.g. build_osx.sh) to docker run' && exit 1"]
