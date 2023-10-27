@@ -39,6 +39,7 @@ jobs:
       - name: Commit and Push libs
         if: steps.check-diff.outputs.diff == 'true'
         run: |
+          git pull
           git config --global user.name 'Builder'
           git config --global user.email 'go-owasm@users.noreply.github.com'
           git commit -am "Built shared lib - linux"
@@ -67,6 +68,7 @@ jobs:
       - name: Commit and Push libs
         if: steps.check-diff.outputs.diff == 'true'
         run: |
+          git pull
           git config --global user.name 'Builder'
           git config --global user.email 'go-owasm@users.noreply.github.com'
           git commit -am "Built shared lib - osx"
