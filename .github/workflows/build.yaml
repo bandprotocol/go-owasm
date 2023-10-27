@@ -16,7 +16,7 @@ on:
       - 'Makefile'
 
 jobs:
-  build_shared_libs:
+  build_shared_lib_linux:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -25,11 +25,37 @@ jobs:
       - name: Build docker images
         run: |
           make docker-image-linux
-          make docker-image-osx
 
       - name: Build shared libs
         run: |
           make release-linux
+
+      - name: Check if there is any change
+        id: check-diff
+        run: |
+          git add -A
+          git diff HEAD --quiet || echo "diff=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and Push libs
+        if: steps.check-diff.outputs.diff == 'true'
+        run: |
+          git config --global user.name 'Builder'
+          git config --global user.email 'go-owasm@users.noreply.github.com'
+          git commit -am "Built shared lib - linux"
+          git push
+
+  build_shared_lib_osx:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build docker images
+        run: |
+          make docker-image-osx
+
+      - name: Build shared libs
+        run: |
           make release-osx
 
       - name: Check if there is any change
@@ -43,5 +69,5 @@ jobs:
         run: |
           git config --global user.name 'Builder'
           git config --global user.email 'go-owasm@users.noreply.github.com'
-          git commit -am "Built shared libs"
+          git commit -am "Built shared lib - osx"
           git push
