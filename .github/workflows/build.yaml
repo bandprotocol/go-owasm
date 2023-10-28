@@ -22,10 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build docker images
-        run: |
-          make docker-image-linux
-
       - name: Build shared libs
         run: |
           make release-linux
@@ -42,10 +38,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Build docker images
-        run: |
-          make docker-image-osx
 
       - name: Build shared libs
         run: |
@@ -90,5 +82,5 @@ jobs:
         run: |
           git config --global user.name 'Builder'
           git config --global user.email 'go-owasm@users.noreply.github.com'
-          git commit -am "Built shared lib - osx"
+          git commit -am "Built shared libs"
           git push
