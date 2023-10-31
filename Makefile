@@ -1,6 +1,6 @@
 .PHONY: docker-images docker-image-linux docker-image-osx
 
-DOCKER_IMAGE := kitipong/go-owasm-ext-builder
+DOCKER_IMAGE := bandprotocol/go-owasm-ext-builder
 DOCKER_TAG := 0.0.1
 USER_ID := $(shell id -u)
 USER_GROUP := $(shell id -g)
