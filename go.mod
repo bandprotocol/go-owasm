@@ -1,4 +1,4 @@
-module github.com/bandprotocol/go-owasm
+module github.com/ODIN-PROTOCOL/go-owasm
 
 go 1.18
 
