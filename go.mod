@@ -1,4 +1,4 @@
-module github.com/ODIN-PROTOCOL/go-owasm
+module github.com/odin-protocol/go-owasm
 
 go 1.18
 
