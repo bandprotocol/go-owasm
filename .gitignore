@@ -1,4 +1,5 @@
 .vscode
+.idea
 
 libgo_owasm/target
 .DS_Store

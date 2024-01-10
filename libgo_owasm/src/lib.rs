@@ -27,15 +27,15 @@ pub fn to_cache(ptr: *mut cache_t) -> Option<&'static mut Cache> {
 }
 
 #[no_mangle]
-pub extern "C" fn init_cache(size: u32) -> *mut cache_t {
-    let r = catch_unwind(|| do_init_cache(size)).unwrap_or_else(|_| bail!("Caught panic"));
+pub extern "C" fn oracle_init_cache(size: u32) -> *mut cache_t {
+    let r = catch_unwind(|| oracle_do_init_cache(size)).unwrap_or_else(|_| bail!("Caught panic"));
     match r {
         Ok(t) => t as *mut cache_t,
         Err(_) => std::ptr::null_mut(),
     }
 }
 
-fn do_init_cache(size: u32) -> Result<*mut Cache, FailureError> {
+fn oracle_do_init_cache(size: u32) -> Result<*mut Cache, FailureError> {
     let cache = Cache::new(CacheOptions { cache_size: size });
     let out = Box::new(cache);
     let res = Ok(Box::into_raw(out));
@@ -43,7 +43,7 @@ fn do_init_cache(size: u32) -> Result<*mut Cache, FailureError> {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
+pub unsafe extern "C" fn oracle_release_cache(cache: *mut cache_t) {
     if !cache.is_null() {
         // this will free cache when it goes out of scope
         let _ = Box::from_raw(cache as *mut Cache);

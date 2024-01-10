@@ -99,7 +99,7 @@ type Cache struct {
 }
 
 func InitCache(cacheSize uint32) (Cache, error) {
-	ptr, err := C.init_cache(C.uint32_t(cacheSize))
+	ptr, err := C.oracle_init_cache(C.uint32_t(cacheSize))
 	if err != nil {
 		return Cache{}, err
 	}
@@ -107,5 +107,5 @@ func InitCache(cacheSize uint32) (Cache, error) {
 }
 
 func ReleaseCache(cache Cache) {
-	C.release_cache(cache.ptr)
+	C.oracle_release_cache(cache.ptr)
 }

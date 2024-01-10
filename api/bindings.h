@@ -86,9 +86,9 @@ typedef struct RunOutput {
   uint64_t gas_used;
 } RunOutput;
 
-struct cache_t *init_cache(uint32_t size);
+struct cache_t *oracle_init_cache(uint32_t size);
 
-void release_cache(struct cache_t *cache);
+void oracle_release_cache(struct cache_t *cache);
 
 Error do_compile(struct Span input, struct Span *output);
 
