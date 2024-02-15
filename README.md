@@ -24,7 +24,7 @@ The `./github` directory, section contains GitHub Action code that aids in testi
 
 ## Development
 
-If you make updates to owasm-vm or the Rust code, it's imperative to [generate bindings.sh](#generate-bindingsh-for-go) and [compile libraries](#compile-shared-and-static-libraries) to update the compiled library within the project, thereby ensuring the go-owasm package incorporates the latest version of the Owasm-vm library.
+If you make updates to owasm-vm or the Rust code, it's essential to [generate bindings.sh](#generate-bindingsh-for-go) and [compile libraries](#compile-shared-and-static-libraries) to update the compiled library within the project, thereby ensuring the go-owasm package incorporates the latest version of the Owasm-vm library.
 
 ### Generate bindings.h for go
 
