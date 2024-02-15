@@ -36,7 +36,7 @@ cd libgo_owasm && cargo build --release
 
 Currently, libraries can be built on Linux and OS X with x86_64 architecture only. However, if you're operating on an unsupported platform, you can push the code to GitHub. Subsequently, GitHub Actions will facilitate testing, compiling the library, and pushing it to your branch.
 
-You can use the commands below to generate libraries for Linux (x86_64) and OS X (x86_64 and aarch64).
+You can use the commands below to generate libraries for Linux (x86_64) and OS X (x86_64).
 
 ```sh
 # Run test
