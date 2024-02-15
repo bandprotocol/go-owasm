@@ -1,30 +1,30 @@
 # Go-owasm
 
-This repository serves as a wrapper of [Owasm-vm](https://github.com/bandprotocol/owasm/tree/master/packages/vm), enabling you to compile and execute Oracle scripts within Go. Mainly, it's created for [x/oracle](https://github.com/bandprotocol/chain/tree/master/x/oracle) module in BandChain.
+Go-owasm, is a repository designed as a Go wrapper for the [owasm-vm](https://github.com/bandprotocol/owasm/tree/master/packages/vm), enabling seamless compilation and execution of Oracle scripts within Go. This project primarily caters to the [x/oracle](https://github.com/bandprotocol/chain/tree/master/x/oracle) module in BandChain.
 
 ## Project structure
 
-This repository contains code written in both Rust and Go. The Rust code is compiled to generate a library (`.dylib`, `.so`, `.a`). This library is linked via cgo and wrapped in Go. The build process is to compile the Rust code into a C library and then link that library with the Go code. Additionally, the package includes pre-compiled libraries, allowing users to import the package and directly utilize the library.
+This repository contains code written in both Rust and Go. The Rust code is compiled to produce a library (`.dylib`, `.so`, `.a`). This library is then linked via cgo and encapsulated within Go. The build process involves compiling the Rust code into a C library and subsequently linking that library with the Go code. Additionally, pre-compiled libraries are included, facilitating users to import the package and directly utilize the library.
 
 ### libgo_owasm
 
-This folder (`./libgo_owasm`) contains Rust code. This code will be compiled into a library that can be linked via cgo and able to be used in Golang. Please see the instructions for compiling it [here](#compile-shared-and-static-libraries).
+The `./libgo_owasm` directory contains Rust code, which is compiled into a library compatible with cgo, thereby enabling its usage within Golang. Please refer to the instructions for compiling it [here](#compile-shared-and-static-libraries).
 
 ### api
 
-This folder (`./api`) contains Go code that uses a library from [libgo_owasm](#libgo_owasm). It also includes those compiled libraries in the folder.
+The `./api` directory, section comprises Go code that interfaces with the library from [libgo_owasm](#libgo_owasm). It also incorporates the pre-compiled libraries within the folder.
 
 ### build
 
-This folder (`./build`) contains scripts and docker files that are used to build the library from Rust code.
+The `./build` directory contains scripts and docker files for building the library from Rust code.
 
 ### .github
 
-This folder (`./github`) contains GitHub Action code that helps with testing, building libraries, and releasing packages.
+The `./github` directory, section contains GitHub Action code that aids in testing, building libraries, and releasing packages.
 
 ## Development
 
-If you update owasm-vm or Rust code, you will have to [generate bindings.sh](#generate-bindingsh-for-go) and [compile libraries](#compile-shared-and-static-libraries) to update the compiled library in the project to make go-owasm package use the newer version of owasm-vm library.
+If you make updates to owasm-vm or the Rust code, it's imperative to [generate bindings.sh](#generate-bindingsh-for-go) and [compile libraries](#compile-shared-and-static-libraries) to update the compiled library within the project, thereby ensuring the go-owasm package incorporates the latest version of the Owasm-vm library.
 
 ### Generate bindings.h for go
 
@@ -34,9 +34,9 @@ cd libgo_owasm && cargo build --release
 
 ### Compile shared and static libraries
 
-Currently, you can build libraries on Linux and OS X with x86_64 architecture only. However, if you are working on a platform that is not currently supported, you can push code into GitHub. Then, GitHub Action will help to test, compile the library, and push it to your branch.
+Currently, libraries can be built on Linux and OS X with x86_64 architecture only. However, if you're operating on an unsupported platform, you can push the code to GitHub. Subsequently, GitHub Actions will facilitate testing, compiling the library, and pushing it to your branch.
 
-You can use the below commands to generate libraries for Linux (x86_64) and OS X (x86_64 and aarch64).
+You can use the commands below to generate libraries for Linux (x86_64) and OS X (x86_64 and aarch64).
 
 ```sh
 # Run test
