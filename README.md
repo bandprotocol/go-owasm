@@ -45,6 +45,6 @@ cd libgo_owasm && cargo test
 # Build docker images used to compile the Rust code
 make docker-images
 
-# Run those docker images to build libraries
+# Run the docker images to build the libraries
 make releases
 ```
