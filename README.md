@@ -34,7 +34,7 @@ cd libgo_owasm && cargo build --release
 
 ### Compile shared and static libraries
 
-Currently, libraries can be built on Linux and OS X with x86_64 architecture only. However, if you're operating on an unsupported platform, you can push the code to GitHub. Subsequently, GitHub Actions will facilitate testing, compiling the library, and pushing it to your branch.
+Currently, the libraries can only be built on Linux and OS X using x86_64 architecture. If you are operating on an unsupported platform, you can push the code to GitHub to trigger a suite of GitHub Actions which will test and  compile the library for you.
 
 You can use the commands below to generate libraries for Linux (x86_64) and OS X (x86_64).
 
