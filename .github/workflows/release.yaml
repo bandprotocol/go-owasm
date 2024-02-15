@@ -12,10 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build docker images
-        run: |
-          make docker-image-alpine
-
       - name: Build static libs
         run: |
           make release-alpine
