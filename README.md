@@ -42,7 +42,7 @@ You can use the commands below to build the libraries on Linux (x86_64) and OS X
 # Run test
 cd libgo_owasm && cargo test
 
-# Build docker images that are used to compile the Rust code
+# Build docker images used to compile the Rust code
 make docker-images
 
 # Run those docker images to build libraries
