@@ -14,7 +14,7 @@ path = "src/lib.rs"
 crate-type = ["staticlib"]
 
 [dependencies]
-owasm-vm = "0.2.2"
+owasm-vm = "0.3.1"
 failure = "0.1.6"
 
 [build-dependencies]
