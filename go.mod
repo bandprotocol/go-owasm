@@ -1,6 +1,6 @@
 module github.com/bandprotocol/go-owasm
 
-go 1.18
+go 1.20.10
 
 require github.com/stretchr/testify v1.6.1
 
