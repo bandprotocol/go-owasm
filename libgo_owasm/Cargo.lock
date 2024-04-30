@@ -703,9 +703,9 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "owasm-crypto"
-version = "0.2.2"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d03f702a74a47fb75b1f9b60d43ea7fa379b788688f06b8c46ac072fef1264f3"
+checksum = "eaf6981f8e30eb028bd0c1eeb72d63a9d80b2da5624f1fe03783a10bc985fa50"
 dependencies = [
  "hex",
  "lazy_static",
@@ -716,9 +716,9 @@ dependencies = [
 
 [[package]]
 name = "owasm-vm"
-version = "0.2.2"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fc4be2edddd23edd5ee43b3501371ab756724191e2fdcce1fd2d69d72cb6793c"
+checksum = "47b8c495d216e034cfae5abb0f797cf88ddf6fac0b01490d1cd124304cf81501"
 dependencies = [
  "assert_matches",
  "clru",
@@ -1222,9 +1222,9 @@ checksum = "1c38c045535d93ec4f0b4defec448e4291638ee608530863b1e2ba115d4fff7f"
 
 [[package]]
 name = "wasm-instrument"
-version = "0.2.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8bca81f5279342b38b17d9acbf007a46ddeb73144e2bd5f0a21bfa9fc5d4ab3e"
+checksum = "2a47ecb37b9734d1085eaa5ae1a81e60801fd8c28d4cabdd8aedb982021918bc"
 dependencies = [
  "parity-wasm",
 ]

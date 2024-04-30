@@ -11,13 +11,13 @@ jobs:
       - name: Install Rust and rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: stable
           override: true
 
       - name: Install Go
         uses: actions/setup-go@v3
         with:
-          go-version: '^1.18.3'
+          go-version: '^1.20.10'
 
       - name: Install Wabt (wat2wasm)
         run: |

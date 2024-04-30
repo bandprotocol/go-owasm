@@ -16,21 +16,60 @@ on:
       - 'Makefile'
 
 jobs:
-  build_shared_libs:
+  build_shared_lib_linux:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build docker images
-        run: |
-          make docker-image-linux
-          make docker-image-osx
-
       - name: Build shared libs
         run: |
           make release-linux
+
+      - name: Push artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: libgo_owasm.so
+          path: api/libgo_owasm.so
+          retention-days: 1
+
+  build_shared_lib_osx:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build shared libs
+        run: |
           make release-osx
+
+      - name: Push artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: libgo_owasm.dylib
+          path: api/libgo_owasm.dylib
+          retention-days: 1
+
+  push:
+    needs:
+      - build_shared_lib_linux
+      - build_shared_lib_osx
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download libgo_owasm.so
+        uses: actions/download-artifact@v3
+        with:
+          name: libgo_owasm.so
+          path: api
+      
+      - name: Download libgo_owasm.dylib
+        uses: actions/download-artifact@v3
+        with:
+          name: libgo_owasm.dylib
+          path: api
 
       - name: Check if there is any change
         id: check-diff
