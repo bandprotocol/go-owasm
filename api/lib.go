@@ -54,7 +54,7 @@ func (vm Vm) Compile(code []byte, spanSize int) ([]byte, error) {
 	defer freeSpan(inputSpan)
 	outputSpan := newSpan(spanSize)
 	defer freeSpan(outputSpan)
-	err := toGoError(C.do_compile(inputSpan, &outputSpan))
+	err := toGoError(C.owasm_do_compile(inputSpan, &outputSpan))
 	return readSpan(outputSpan), err
 }
 
@@ -71,7 +71,7 @@ func (vm Vm) run(code []byte, gasLimit uint64, isPrepare bool, env EnvInterface)
 	defer freeSpan(codeSpan)
 	envIntl := createEnvIntl(env)
 	output := C.RunOutput{}
-	err := toGoError(C.do_run(vm.cache.ptr, codeSpan, C.uint64_t(gasLimit), C.bool(isPrepare), C.Env{
+	err := toGoError(C.owasm_do_run(vm.cache.ptr, codeSpan, C.uint64_t(gasLimit), C.bool(isPrepare), C.Env{
 		env: (*C.env_t)(unsafe.Pointer(envIntl)),
 		dis: C.EnvDispatcher{
 			get_span_size:            C.get_span_size_fn(C.cGetSpanSize_cgo),
@@ -99,7 +99,7 @@ type Cache struct {
 }
 
 func InitCache(cacheSize uint32) (Cache, error) {
-	ptr, err := C.init_cache(C.uint32_t(cacheSize))
+	ptr, err := C.owasm_init_cache(C.uint32_t(cacheSize))
 	if err != nil {
 		return Cache{}, err
 	}
@@ -107,5 +107,5 @@ func InitCache(cacheSize uint32) (Cache, error) {
 }
 
 func ReleaseCache(cache Cache) {
-	C.release_cache(cache.ptr)
+	C.owasm_release_cache(cache.ptr)
 }

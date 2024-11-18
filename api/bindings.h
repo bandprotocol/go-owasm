@@ -86,15 +86,15 @@ typedef struct RunOutput {
   uint64_t gas_used;
 } RunOutput;
 
-struct cache_t *init_cache(uint32_t size);
+struct cache_t *owasm_init_cache(uint32_t size);
 
-void release_cache(struct cache_t *cache);
+void owasm_release_cache(struct cache_t *cache);
 
-Error do_compile(struct Span input, struct Span *output);
+Error owasm_do_compile(struct Span input, struct Span *output);
 
-Error do_run(struct cache_t *cache,
-             struct Span code,
-             uint64_t gas_limit,
-             bool is_prepare,
-             struct Env env,
-             struct RunOutput *output);
+Error owasm_do_run(struct cache_t *cache,
+                   struct Span code,
+                   uint64_t gas_limit,
+                   bool is_prepare,
+                   struct Env env,
+                   struct RunOutput *output);

@@ -27,7 +27,7 @@ pub fn to_cache(ptr: *mut cache_t) -> Option<&'static mut Cache> {
 }
 
 #[no_mangle]
-pub extern "C" fn init_cache(size: u32) -> *mut cache_t {
+pub extern "C" fn owasm_init_cache(size: u32) -> *mut cache_t {
     let r = catch_unwind(|| do_init_cache(size)).unwrap_or_else(|_| bail!("Caught panic"));
     match r {
         Ok(t) => t as *mut cache_t,
@@ -43,7 +43,7 @@ fn do_init_cache(size: u32) -> Result<*mut Cache, FailureError> {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
+pub unsafe extern "C" fn owasm_release_cache(cache: *mut cache_t) {
     if !cache.is_null() {
         // this will free cache when it goes out of scope
         let _ = Box::from_raw(cache as *mut Cache);
@@ -52,7 +52,7 @@ pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
 
 // Compile and execute section
 #[no_mangle]
-pub extern "C" fn do_compile(input: Span, output: &mut Span) -> Error {
+pub extern "C" fn owasm_do_compile(input: Span, output: &mut Span) -> Error {
     match owasm_vm::compile(input.read()) {
         Ok(out) => {
             output.write(&out);
@@ -63,7 +63,7 @@ pub extern "C" fn do_compile(input: Span, output: &mut Span) -> Error {
 }
 
 #[no_mangle]
-pub extern "C" fn do_run(
+pub extern "C" fn owasm_do_run(
     cache: *mut cache_t,
     code: Span,
     gas_limit: u64,
