@@ -76,7 +76,7 @@ func TestRuntimeError(t *testing.T) {
 	require.Equal(t, ErrRuntime, err)
 }
 
-func TestInvaildSignature(t *testing.T) {
+func TestInvalidSignature(t *testing.T) {
 	vm, release := newTestVM(t)
 	defer release()
 
