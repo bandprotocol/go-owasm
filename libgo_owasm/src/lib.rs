@@ -7,7 +7,7 @@ use env::{Env, RunOutput};
 use span::Span;
 
 use failure::{bail, Error as FailureError};
-use std::panic::catch_unwind;
+use std::panic::{catch_unwind, AssertUnwindSafe};
 
 use owasm_vm;
 use owasm_vm::cache::{Cache, CacheOptions};
@@ -73,12 +73,16 @@ pub extern "C" fn do_run(
 ) -> Error {
     if !cache.is_null() {
         let vm_querier = vm::VMQuerier::new(env);
-        match owasm_vm::run(to_cache(cache).unwrap(), code.read(), gas_limit, is_prepare, vm_querier) {
-            Ok(gas_used) => {
+        let result = catch_unwind(AssertUnwindSafe(|| {
+            owasm_vm::run(to_cache(cache).unwrap(), code.read(), gas_limit, is_prepare, vm_querier)
+        }));
+        match result {
+            Ok(Ok(gas_used)) => {
                 output.gas_used = gas_used;
                 Error::NoError
             }
-            Err(e) => e,
+            Ok(Err(e)) => e,
+            Err(_) => Error::RuntimeError, // panic → safe error
         }
     } else {
         Error::UnknownError
