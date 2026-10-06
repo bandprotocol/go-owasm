@@ -53,12 +53,14 @@ pub unsafe extern "C" fn release_cache(cache: *mut cache_t) {
 // Compile and execute section
 #[no_mangle]
 pub extern "C" fn do_compile(input: Span, output: &mut Span) -> Error {
-    match owasm_vm::compile(input.read()) {
-        Ok(out) => {
+    let result = catch_unwind(AssertUnwindSafe(|| owasm_vm::compile(input.read())));
+    match result {
+        Ok(Ok(out)) => {
             output.write(&out);
             Error::NoError
         }
-        Err(e) => e,
+        Ok(Err(e)) => e,
+        Err(_) => Error::UnknownError, // panic → safe error
     }
 }
 
