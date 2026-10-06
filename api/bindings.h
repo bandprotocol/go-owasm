@@ -49,7 +49,7 @@ typedef struct cache_t {
  * section is not owned by the span, similar to C++'s std::span. The `span`'s creator is
  * responsible for allocating the space and freeing it afterward.
  *
- * The primary usecase of `span` is to faciliate communication between Go and Rust.
+ * The primary usecase of `span` is to facilitate communication between Go and Rust.
  * One side allocates space and creates a `span` for the counterpart to read or write
  * without needing to worry about memory management.
  */
