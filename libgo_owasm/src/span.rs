@@ -6,12 +6,12 @@ use owasm_vm::error::Error;
 /// section is not owned by the span, similar to C++'s std::span. The `span`'s creator is
 /// responsible for allocating the space and freeing it afterward.
 ///
-/// The primary usecase of `span` is to faciliate communication between Go and Rust.
+/// The primary usecase of `span` is to facilitate communication between Go and Rust.
 /// One side allocates space and creates a `span` for the counterpart to read or write
 /// without needing to worry about memory management.
 pub struct Span {
     pub ptr: *mut u8, // The starting location of Span's memory piece.
-    pub len: usize,   // The variable to keep track of how many bytes are writen.
+    pub len: usize,   // The variable to keep track of how many bytes are written.
     pub cap: usize,   // The maximum capacity of this span.
 }
 
@@ -38,7 +38,7 @@ impl Span {
     }
 
     /// Appends data into the `span`. Returns NoError if the write is successful.
-    /// The function may fail if the given data exceeeds the capacity of the `span`.
+    /// The function may fail if the given data exceeds the capacity of the `span`.
     pub fn write(&mut self, data: &[u8]) -> Error {
         if self.len + data.len() > self.cap {
             return Error::SpanTooSmallError;
